@@ -1,6 +1,8 @@
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -15,46 +17,60 @@ public class Query {
 		this.keywordsCollection = null;
 		this.imageZipFolder = null;
 	}
-
-//	Query(FileManagement manager, String keywords) {
-//		this.manager = manager;
-//		this.setKeywords(keywords);
-//		imageZipFolder = null;
-//	}
-//
-//	Query(FileManagement manager, String keywords, String imageZipPath) {
-//		this.manager = manager;
-//		this.setKeywords(keywords);
-//		this.setImageZipFolder(imageZipPath);
-//	}
-
-	public ArrayList<Document> search() {
-		ArrayList<Document> matchingDocuments = new ArrayList<>();
+	
+	public ArrayList<Document> search(String keywords, boolean andOperation, boolean exactOperation) {
+		this.setKeywords(keywords);
+		Set<Document> matchingDocuments = new HashSet<>();
 		this.manager.getFiles().forEach(document -> {
-			try {
-				String content = document.getContentText();
-				for (String keyword : this.keywordsCollection) {
-					if (content.contains(keyword)) {
-						matchingDocuments.add(document);
-					}
+			int matchCounter = 0;
+			for (String keyword : this.keywordsCollection) {
+				try {
+					String content = document.getContentText();
+					// or, exact
+					// and, exact
+					// and, not exact
+					// or, not exact
+					if (!andOperation && exactOperation) {
+						if (content.contains(keyword)) {
+							matchingDocuments.add(document);
+						}
+					} else if (andOperation && exactOperation) {
+						if (content.contains(keyword)) {
+							matchCounter++; 
+							if (matchCounter == this.keywordsCollection.length) {
+								matchingDocuments.add(document);
+							}
+						}
+					} else if (andOperation && !exactOperation) {
+						if (StringUtils.containsIgnoreCase(content,keyword)) {
+							matchCounter++; 
+							if (matchCounter == this.keywordsCollection.length) {
+								matchingDocuments.add(document);
+							}
+						}
+					} else if (!(andOperation && exactOperation)) {
+						if (StringUtils.containsIgnoreCase(content, keyword)) {
+							matchingDocuments.add(document);
+						}
+					}	
+				} catch (IOException e) {
+					System.out.println("Cannot find or support specified file");
+					e.printStackTrace();
 				}
-			} catch (IOException e) {
-				System.out.println("Error: File not found or supported.");
-				e.printStackTrace();
 			}
-		});
-		return matchingDocuments;
+		});	
+		return new ArrayList<Document>(matchingDocuments);
 	}
 
-	public ArrayList<Document> filter(String fileExtension) {
-		ArrayList<Document> filteredList = this.manager.getFiles();
+	public ArrayList<Document> filter(String fileExtension, ArrayList<Document> documents) {
+		ArrayList<Document> filteredList = documents;
 		filteredList.removeIf(doc -> !doc.toString().contains(fileExtension));
 		return filteredList;
 	}
 
-	public ArrayList<Document> filter(long sizeMin, long sizeMax) {
-		ArrayList<Document> filteredList = this.manager.getFiles();
-		filteredList.removeIf(doc -> doc.length() < sizeMin && doc.length() > sizeMax);
+	public ArrayList<Document> filter(long sizeMin, long sizeMax, ArrayList<Document> documents) {
+		ArrayList<Document> filteredList = documents;
+		filteredList.removeIf(doc -> doc.length() < sizeMin || doc.length() > sizeMax);
 		return filteredList;
 	}
 
@@ -66,7 +82,6 @@ public class Query {
 				matches += StringUtils.countMatches(content, keyword);
 			}
 			return matches;
-
 		} catch (IOException e) {
 			System.out.println("Error: File not found or supported.");
 			e.printStackTrace();
@@ -74,10 +89,10 @@ public class Query {
 		return 0;
 	}
 
-	public void setKeywords(String keywords) {
+	private void setKeywords(String keywords) {
 		this.keywordsCollection = keywords.split(",");
-		for (String str : keywordsCollection) {
-			str.trim();
+		for (int i = 0; i < this.keywordsCollection.length; i++) {
+			keywordsCollection[i] = keywordsCollection[i].trim();
 		}
 	}
 

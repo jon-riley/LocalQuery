@@ -40,21 +40,7 @@ public class Document extends File {
 			PDDocument pdf = PDDocument.load(new File(this.path));
 			return new PDFTextStripper().getText(pdf);
 		} else {
-			throw new Error("File type not found or supported.");
+			throw new Error("Error: File type not found or supported.");
 		}
 	}
-	
-//	public ArrayList<String> getImagePaths() {
-//		// TODO: get image paths
-//		
-//	}
-	
-//	public String extractImages() {
-//		// TODO: implement
-//		
-//		// return zip path of images
-//		
-//	}
-	
-	
 }

@@ -27,7 +27,6 @@ public class FileManagement {
 	public ArrayList<Document> getFiles() {
 		return listFilesOfFolder(root);
 	}
-
 	
 	public File getRoot() {
 		return this.root;
