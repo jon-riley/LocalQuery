@@ -48,6 +48,11 @@ public class App {
 		String ext = sc.nextLine();
 		query.filter(ext, results).forEach(document -> System.out.println(document.getName()));
 		
+		// Sort results 
+		System.out.println("* * * * * * * * * * * * * * * * * * * * \n Sorting..."); 
+		// sort by date modified
+		System.out.println("Sorting by date modified");
+		query.sortByDateModified(results, false).forEach(document -> System.out.println(document.getName()));
 		sc.close();
 	}	
 }
