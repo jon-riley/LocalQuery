@@ -14,7 +14,7 @@ public class App {
 		String root = sc.nextLine();
 		System.out.println("You have entered " + root);
 		
-		FileManagement fm = new FileManagement(new File(root));
+		FileManager fm = new FileManager(new File(root));
 		Query query = new Query(fm);
 		
 		// Enter keywords
@@ -42,17 +42,17 @@ public class App {
 		System.out.println("Search results...");
 		ArrayList<Document> results = query.search(keywords, operation, caseOperation);
 		results.forEach(document -> System.out.println(document.getName()));
-				
+		
 		// Filter results
 		System.out.println("* * * * * * * * * * * * * * * * * * * * \n Filter by extension: txt, pdf..."); 
 		String ext = sc.nextLine();
-		query.filter(ext, results).forEach(document -> System.out.println(document.getName()));
+		fm.filterByFileType(ext).forEach(document -> System.out.println(document.getName()));
 		
 		// Sort results 
 		System.out.println("* * * * * * * * * * * * * * * * * * * * \n Sorting..."); 
 		// sort by date modified
 		System.out.println("Sorting by date modified");
-		query.sortByDateModified(results, false).forEach(document -> System.out.println(document.getName()));
+		fm.sortByDateModified(false).forEach(document -> System.out.println(document.getName()));
 		sc.close();
 	}	
 }
