@@ -43,16 +43,17 @@ public class App {
 		ArrayList<Document> results = query.search(keywords, operation, caseOperation);
 		results.forEach(document -> System.out.println(document.getName()));
 		
-		// Filter results
+		// Filter all results
 		System.out.println("* * * * * * * * * * * * * * * * * * * * \n Filter by extension: txt, pdf..."); 
 		String ext = sc.nextLine();
 		fm.filterByFileType(ext).forEach(document -> System.out.println(document.getName()));
 		
-		// Sort results 
+		// Sort all results 
 		System.out.println("* * * * * * * * * * * * * * * * * * * * \n Sorting..."); 
 		// sort by date modified
 		System.out.println("Sorting by date modified");
 		fm.sortByDateModified(false).forEach(document -> System.out.println(document.getName()));
 		sc.close();
+		
 	}	
 }

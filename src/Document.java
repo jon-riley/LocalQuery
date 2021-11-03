@@ -1,13 +1,16 @@
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Scanner;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
-
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.openxml4j.opc.OPCPackage;
+import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
 
 public class Document extends File {
 	
@@ -35,7 +38,8 @@ public class Document extends File {
 	}
 	
 	public String getContentText() throws IOException {
-		if (this.getFileExtension().equals("txt")) {
+		switch (this.getFileExtension()) {
+		case "txt": 
 			Scanner textScanner = new Scanner(file);
 			String textContent = "";
 			while (textScanner.hasNextLine()) {
@@ -43,10 +47,18 @@ public class Document extends File {
 			}
 			textScanner.close();
 			return textContent;
-		} else if (this.getFileExtension().equals("pdf")) {
+		case "pdf": 
 			PDDocument pdf = PDDocument.load(file);
 			return new PDFTextStripper().getText(pdf);
-		} else {
+		case "doc":
+		case "docx":
+			InputStream inputStream = new FileInputStream(this.file);
+			XWPFDocument wordDocument = new XWPFDocument(inputStream);
+			XWPFWordExtractor textExtractor = new XWPFWordExtractor(wordDocument);
+			textContent = textExtractor.getText();
+			textExtractor.close();
+			return textContent;
+		default:
 			throw new Error("Error: File type not found or supported.");
 		}
 	}

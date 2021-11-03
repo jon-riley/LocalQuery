@@ -6,11 +6,13 @@ import java.util.Comparator;
 public class FileManager {
 
 	private File root;
+	private ArrayList<Document> filePaths;
 
 	FileManager(File root) {
 		if (root.isFile()) {
 			throw new Error("Error: root is not a folder.");
 		}
+		this.filePaths = new ArrayList<Document>();
 		this.root = root;
 	}
 
@@ -19,15 +21,17 @@ public class FileManager {
 	}
 
 	private ArrayList<Document> listFilesOfFolder(File folder) {
-		ArrayList<Document> filePaths = new ArrayList<>();
 		for (final File fileEntry : folder.listFiles()) {
 			if (fileEntry.isDirectory()) {
+				System.out.println("if condition entered -- found a directory");
 				listFilesOfFolder(fileEntry);
 			} else {
 				Document document = new Document(fileEntry.toString());
 				switch (document.getFileExtension()) {
 				case "txt":
 				case "pdf":
+				case "doc":
+				case "docx":
 					filePaths.add(new Document(fileEntry.toString()));
 				}
 			}
@@ -122,7 +126,7 @@ public class FileManager {
 			Collections.sort(documents, Collections.reverseOrder());
 		return documents;
 	}
-
+	
 	public File getRoot() {
 		return this.root;
 	}

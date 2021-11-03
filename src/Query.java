@@ -11,17 +11,15 @@ import org.apache.commons.lang3.StringUtils;
 public class Query {
 
 	private String[] keywordsCollection;
-	private File imageZipFolder;
 	private FileManager manager; 
 
 	Query(FileManager manager) {
 		this.manager = manager;
 		this.keywordsCollection = null;
-		this.imageZipFolder = null;
 	}
 	
 	public ArrayList<Document> search(String keywords, boolean andOperation, boolean exactOperation) {
-		this.setKeywords(keywords);
+		this.setKeywordCollection(keywords);
 		Set<Document> matchingDocuments = new HashSet<>();
 		this.manager.getFiles().forEach(document -> {
 			int matchCounter = 0;
@@ -83,23 +81,20 @@ public class Query {
 		return 0;
 	}
 
-	private void setKeywords(String keywords) {
-		this.keywordsCollection = keywords.split(",");
-		for (int i = 0; i < this.keywordsCollection.length; i++) {
-			keywordsCollection[i] = keywordsCollection[i].trim();
-		}
+	public void setKeywordCollection(String delimitedKeywords) {
+		this.keywordsCollection = delimitedKeywords.trim().split("\\s*,\\s*");
 	}
-
-	public void setImageZipFolder(String imageZipPath) {
-		this.imageZipFolder = new File(imageZipPath);
+	
+	public void setManager(FileManager manager) {
+		this.manager = manager;
 	}
-
-	public String[] getKeywords() {
+	
+	public String[] getKeywordCollection() {
 		return this.keywordsCollection;
 	}
-
-	public File getImageZipFolder() {
-		return this.imageZipFolder;
+	
+	public FileManager getManager() {
+		return this.manager;
 	}
 
 }
