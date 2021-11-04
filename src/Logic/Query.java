@@ -20,7 +20,7 @@ public class Query {
 		this.keywordsCollection = null;
 	}
 	
-	public ArrayList<Document> search(String keywords, boolean andOperation, boolean exactOperation) throws IOException {
+	public ArrayList<Document> search(String keywords, boolean andOperation, boolean exactOperation) {
 		this.setKeywordCollection(keywords);
 		Set<Document> matchingDocuments = new HashSet<>();
 		this.manager.getFiles().forEach(document -> {
@@ -30,8 +30,8 @@ public class Query {
 					// search first if filename matches
 					if (StringUtils.containsIgnoreCase(document.getName(), keyword)) {
 						matchingDocuments.add(document);
-					} 
-					// search otherwise for content 
+					}
+					// search otherwise for content
 					else {
 						String content = document.getContentText();
 						

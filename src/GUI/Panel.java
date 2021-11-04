@@ -72,8 +72,7 @@ class Panel extends JPanel {
         JButton search = new JButton("Search");
         search.addActionListener(new ActionListener() { 
             public void actionPerformed(ActionEvent e) {
-                Query qman = new Query(fman);
-                searchShowFiles(qman.search(tf.getText(), false, true));
+                searchShowFiles(fman.search(tf.getText(), false, true));
             }
         });
 

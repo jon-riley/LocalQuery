@@ -18,20 +18,16 @@ public class FileManager {
 	private HashSet<Document> documentPaths;
 	private ArrayList<Document> documentMatches;
 
-	FileManager(File root) {
+	public FileManager(File root) {
 		if (root.isFile()) {
 			throw new Error("Error: root is not a folder.");
 		}
 		this.documentPaths = new HashSet<Document>();
 		this.root = root;
-		try {
-			this.documentMatches = this.getFiles();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		this.documentMatches = this.getFiles();
 	}
 
-	public ArrayList<Document> getFiles() throws IOException {
+	public ArrayList<Document> getFiles() {
 		return new ArrayList<Document>(this.listFilesOfFolder(root));
 	}
 
@@ -61,25 +57,24 @@ public class FileManager {
 		return this.documentPaths;
 	}
 
-	public ArrayList<Document> search(String keywords, boolean andOperation, boolean exactOperation)
-			throws IOException {
+	public ArrayList<Document> search(String keywords, boolean andOperation, boolean exactOperation) {
 		this.documentMatches = (new Query(this)).search(keywords, andOperation, exactOperation);
 		return this.documentMatches;
 	}
 
-	public ArrayList<Document> filterByFileType(String fileExtension) throws IOException {
+	public ArrayList<Document> filterByFileType(String fileExtension) {
 		ArrayList<Document> filteredList = this.documentMatches;
 		filteredList.removeIf(doc -> !doc.toString().contains(fileExtension));
 		return filteredList;
 	}
 
-	public ArrayList<Document> filterBySize(long sizeMin, long sizeMax) throws IOException {
+	public ArrayList<Document> filterBySize(long sizeMin, long sizeMax) {
 		ArrayList<Document> filteredList = this.documentMatches;
 		filteredList.removeIf(doc -> doc.length() < sizeMin || doc.length() > sizeMax);
 		return filteredList;
 	}
 
-	public ArrayList<Document> sortByFileName(boolean ascending) throws IOException {
+	public ArrayList<Document> sortByFileName(boolean ascending) {
 		Collections.sort(this.documentMatches, new Comparator<Document>() {
 			@Override
 			public int compare(Document d1, Document d2) {
@@ -92,7 +87,7 @@ public class FileManager {
 		return this.documentMatches;
 	}
 
-	public ArrayList<Document> sortByFileType(boolean ascending) throws IOException {
+	public ArrayList<Document> sortByFileType(boolean ascending) {
 		Collections.sort(this.documentMatches, new Comparator<Document>() {
 			@Override
 			public int compare(Document d1, Document d2) {
@@ -104,7 +99,7 @@ public class FileManager {
 		return this.documentMatches;
 	}
 
-	public ArrayList<Document> sortByDateModified(boolean ascending) throws IOException {
+	public ArrayList<Document> sortByDateModified(boolean ascending) {
 		Collections.sort(this.documentMatches, new Comparator<Document>() {
 			@Override
 			public int compare(Document d1, Document d2) {
@@ -116,7 +111,7 @@ public class FileManager {
 		return this.documentMatches;
 	}
 
-	public ArrayList<Document> sortBySize(boolean ascending) throws IOException {
+	public ArrayList<Document> sortBySize(boolean ascending) {
 		Collections.sort(this.documentMatches, new Comparator<Document>() {
 			@Override
 			public int compare(Document d1, Document d2) {
@@ -133,7 +128,7 @@ public class FileManager {
 		return this.documentMatches;
 	}
 
-	public ArrayList<Document> sortByMatches(boolean ascending) throws IOException {
+	public ArrayList<Document> sortByMatches(boolean ascending) {
 		Query query = new Query(this);
 		Collections.sort(this.documentMatches, new Comparator<Document>() {
 			@Override
