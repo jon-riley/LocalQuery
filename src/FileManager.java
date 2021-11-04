@@ -2,28 +2,28 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 
 public class FileManager {
 
 	private File root;
-	private ArrayList<Document> filePaths;
-
+	private HashSet<Document> documentPaths;
+	
 	FileManager(File root) {
 		if (root.isFile()) {
 			throw new Error("Error: root is not a folder.");
 		}
-		this.filePaths = new ArrayList<Document>();
+		this.documentPaths = new HashSet<Document>();
 		this.root = root;
 	}
 
 	public ArrayList<Document> getFiles() {
-		return listFilesOfFolder(root);
+		return new ArrayList<Document>(this.listFilesOfFolder(root));
 	}
 
-	private ArrayList<Document> listFilesOfFolder(File folder) {
+	private HashSet<Document> listFilesOfFolder(File folder) {
 		for (final File fileEntry : folder.listFiles()) {
 			if (fileEntry.isDirectory()) {
-				System.out.println("if condition entered -- found a directory");
 				listFilesOfFolder(fileEntry);
 			} else {
 				Document document = new Document(fileEntry.toString());
@@ -32,11 +32,11 @@ public class FileManager {
 				case "pdf":
 				case "doc":
 				case "docx":
-					filePaths.add(new Document(fileEntry.toString()));
+					documentPaths.add(new Document(fileEntry.toString()));
 				}
 			}
 		}
-		return filePaths;
+		return documentPaths;
 	}
 
 	public ArrayList<Document> filterByFileType(String fileExtension) {
