@@ -13,14 +13,14 @@ import org.apache.commons.lang3.StringUtils;
 public class Query {
 
 	private String[] keywordsCollection;
-	private FileManager manager; 
+	private FileManager manager;
 
 	Query(FileManager manager) {
 		this.manager = manager;
 		this.keywordsCollection = null;
 	}
 	
-	public ArrayList<Document> search(String keywords, boolean andOperation, boolean exactOperation) {
+	public ArrayList<Document> search(String keywords, boolean andOperation, boolean exactOperation) throws IOException {
 		this.setKeywordCollection(keywords);
 		Set<Document> matchingDocuments = new HashSet<>();
 		this.manager.getFiles().forEach(document -> {

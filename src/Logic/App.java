@@ -17,7 +17,6 @@ public class App {
 		System.out.println("You have entered " + root);
 		
 		FileManager fm = new FileManager(new File(root));
-		Query query = new Query(fm);
 		
 		// Enter keywords
 		System.out.println("Enter comma delimited keywords to search... (eg. Hello, biology, investment)");
@@ -42,13 +41,14 @@ public class App {
 
 		// Query results
 		System.out.println("Search results...");
-		ArrayList<Document> results = query.search(keywords, operation, caseOperation);
+		ArrayList<Document> results = fm.search(keywords, operation, caseOperation);
 		results.forEach(document -> System.out.println(document.getName()));
 		
 		// Filter all results
 		System.out.println("* * * * * * * * * * * * * * * * * * * * \n Filter by extension: txt, pdf..."); 
 		String ext = sc.nextLine();
 		fm.filterByFileType(ext).forEach(document -> System.out.println(document.getName()));
+		
 		
 		// Sort all results 
 		System.out.println("* * * * * * * * * * * * * * * * * * * * \n Sorting..."); 

@@ -51,7 +51,10 @@ public class Document extends File {
 			return textContent;
 		case "pdf": 
 			PDDocument pdf = PDDocument.load(file);
-			return new PDFTextStripper().getText(pdf);
+			PDFTextStripper textStripper = new PDFTextStripper();
+			textContent = textStripper.getText(pdf);		
+			pdf.close();
+			return textContent;
 		case "doc":
 		case "docx":
 			InputStream inputStream = new FileInputStream(this.file);

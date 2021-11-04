@@ -7,7 +7,7 @@ import javax.swing.*;
 import javax.swing.tree.*;
 import java.text.SimpleDateFormat;
 
-import FileManagerThings.*;
+import Logic.*;
 
 /***********************************/
 class PanelTest extends JFrame {
