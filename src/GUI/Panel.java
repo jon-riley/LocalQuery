@@ -1,6 +1,7 @@
 package GUI;
 
 import java.io.*;
+import java.sql.Types;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -22,7 +23,7 @@ class PanelTest extends JFrame {
     }
 
     public static void main(String[] args) {
-        new PanelTest(".");
+        new PanelTest("D:/Documents");
     }
 }
 
@@ -37,7 +38,7 @@ class Panel extends JPanel {
     String currentRoot;
     
     
-    String zipPath = "Test";
+    String zipPath = "ZIP Path";
     String currDirectory = null;
 
     SimpleDateFormat date = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
@@ -82,7 +83,12 @@ class Panel extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 fman.setRoot(new File(directoryPath.getText()));
                 currentRoot = directoryPath.getText();
-                showFiles();
+                try {
+                    showFiles();
+                } catch (IOException e1) {
+                    // TODO Auto-generated catch block
+                    e1.printStackTrace();
+                }
             } 
         });
 
@@ -91,37 +97,93 @@ class Panel extends JPanel {
 
         //Create the sort by tab
         JMenu m1 = new JMenu("Sort By");
-        JMenuItem filename = new JMenuItem("File Name");
-        filename.addActionListener(new ActionListener() { 
+        JMenu filename = new JMenu("File Name");
+        JMenuItem[] fNameSubItems = new JMenuItem[2];
+        fNameSubItems[0] = (new JMenuItem("A-Z"));
+        fNameSubItems[1] = (new JMenuItem("Z-A"));
+        filename.add(fNameSubItems[0]);
+        filename.add(fNameSubItems[1]);
+        fNameSubItems[0].addActionListener(new ActionListener() { 
             public void actionPerformed(ActionEvent e) {
                 searchShowFiles(fman.sortByFileName(true));
             } 
         });
-        JMenuItem datemodified = new JMenuItem("Date Modified");
-        datemodified.addActionListener(new ActionListener() { 
+        fNameSubItems[1].addActionListener(new ActionListener() { 
+            public void actionPerformed(ActionEvent e) {
+                searchShowFiles(fman.sortByFileName(false));
+            } 
+        });
+
+        JMenu datemodified = new JMenu("Date Modified");
+        JMenuItem[] dateSubItems = new JMenuItem[2];
+        dateSubItems[0] = (new JMenuItem("Newest to Oldest"));
+        dateSubItems[1] = (new JMenuItem("Oldest to Newest"));
+        datemodified.add(dateSubItems[0]);
+        datemodified.add(dateSubItems[1]);
+        dateSubItems[0].addActionListener(new ActionListener() { 
             public void actionPerformed(ActionEvent e) {
                 searchShowFiles(fman.sortByDateModified(true));
             } 
         });
-        JMenuItem filetype = new JMenuItem("File Type");
-        filetype.addActionListener(new ActionListener() { 
+        dateSubItems[1].addActionListener(new ActionListener() { 
+            public void actionPerformed(ActionEvent e) {
+                searchShowFiles(fman.sortByDateModified(false));
+            } 
+        });
+
+        JMenu filetype = new JMenu("File Type");
+        JMenuItem[] typeSubItems = new JMenuItem[2];
+        typeSubItems[0] = (new JMenuItem("A-Z"));
+        typeSubItems[1] = (new JMenuItem("Z-A"));
+        filetype.add(typeSubItems[0]);
+        filetype.add(typeSubItems[1]);
+        typeSubItems[0].addActionListener(new ActionListener() { 
             public void actionPerformed(ActionEvent e) {
                 searchShowFiles(fman.sortByFileType(true));
             } 
         });
-        JMenuItem size = new JMenuItem("Size");
-        size.addActionListener(new ActionListener() { 
+        typeSubItems[1].addActionListener(new ActionListener() { 
+            public void actionPerformed(ActionEvent e) {
+                searchShowFiles(fman.sortByFileType(false));
+            } 
+        });
+
+        JMenu size = new JMenu("Size");
+        JMenuItem[] sizeSubItems = new JMenuItem[2];
+        sizeSubItems[0] = (new JMenuItem("Smallest to Largest"));
+        sizeSubItems[1] = (new JMenuItem("Largest to Smallest"));
+        size.add(sizeSubItems[0]);
+        size.add(sizeSubItems[1]);
+        sizeSubItems[0].addActionListener(new ActionListener() { 
             public void actionPerformed(ActionEvent e) {
                 searchShowFiles(fman.sortBySize(true));
             } 
         });
-        JMenuItem keyterms = new JMenuItem("Matched Key Terms");
-        keyterms.addActionListener(new ActionListener() { 
+        sizeSubItems[1].addActionListener(new ActionListener() { 
+            public void actionPerformed(ActionEvent e) {
+                searchShowFiles(fman.sortBySize(false));
+            } 
+        });
+
+        JMenu keyterms = new JMenu("Matched Key Terms");
+        JMenuItem[] termsSubItems = new JMenuItem[2];
+        termsSubItems[0] = (new JMenuItem("Smallest to Largest"));
+        termsSubItems[1] = (new JMenuItem("Largest to Smallest"));
+        keyterms.add(termsSubItems[0]);
+        keyterms.add(termsSubItems[1]);
+        termsSubItems[0].addActionListener(new ActionListener() { 
             public void actionPerformed(ActionEvent e) {
                 searchShowFiles(fman.sortByMatches(true));
             } 
         });
+        termsSubItems[1].addActionListener(new ActionListener() { 
+            public void actionPerformed(ActionEvent e) {
+                searchShowFiles(fman.sortByMatches(false));
+            } 
+        });
+
         JMenuItem keyimages = new JMenuItem("Matched Key Images");
+
         m1.add(filename);
         m1.add(datemodified);
         m1.add(filetype);
@@ -163,7 +225,7 @@ class Panel extends JPanel {
     }
 
     //shows files and their info from directory search
-    void showFiles() {
+    void showFiles() throws IOException {
         remove(dspTable);
         fileData = new JTable(data, colHeads);
         dspTable = new JScrollPane(fileData);
