@@ -83,8 +83,8 @@ public class FileManager {
 		});
 
 		if (!ascending)
-			Collections.sort(this.documentMatches, Collections.reverseOrder());
-		return this.documentMatches;
+			Collections.reverse(documentMatches);
+			return this.documentMatches;
 	}
 
 	public ArrayList<Document> sortByFileType(boolean ascending) {
@@ -95,7 +95,7 @@ public class FileManager {
 			}
 		});
 		if (!ascending)
-			Collections.sort(this.documentMatches, Collections.reverseOrder());
+			Collections.reverse(documentMatches);
 		return this.documentMatches;
 	}
 
@@ -107,7 +107,7 @@ public class FileManager {
 			}
 		});
 		if (!ascending)
-			Collections.sort(this.documentMatches, Collections.reverseOrder());
+			Collections.reverse(documentMatches);
 		return this.documentMatches;
 	}
 
@@ -124,7 +124,7 @@ public class FileManager {
 			}
 		});
 		if (!ascending)
-			Collections.sort(this.documentMatches, Collections.reverseOrder());
+			Collections.reverse(documentMatches);
 		return this.documentMatches;
 	}
 
@@ -142,7 +142,7 @@ public class FileManager {
 			}
 		});
 		if (!ascending)
-			Collections.sort(this.documentMatches, Collections.reverseOrder());
+			Collections.reverse(documentMatches);
 		return this.documentMatches;
 	}
 
