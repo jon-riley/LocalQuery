@@ -68,4 +68,6 @@ public class Document extends File {
 		}
 	}
 	
+	// getContentImages - arraylist of bufferedImage objects
+	
 }

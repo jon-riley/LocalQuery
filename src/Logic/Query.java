@@ -1,5 +1,6 @@
 package Logic;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -21,9 +22,16 @@ public class Query {
 	}
 	
 	public ArrayList<Document> search(String keywords, boolean andOperation, boolean exactOperation) {
+		BufferedImage userImage = this.manager.getUserImage(); 	// check against file manager's bufferedimage for extracted images from file
 		this.setKeywordCollection(keywords);
 		Set<Document> matchingDocuments = new HashSet<>();
 		this.manager.getFiles().forEach(document -> {
+			if (userImage != null) {
+//				TODO:
+//				extract document images and set to array/arraylist
+//				opencv to compare bufferedimage objects - iterate through array/arraylist and compare to userImage
+//				return document when matched
+			}
 			int matchCounter = 0;
 			for (String keyword : this.keywordsCollection) {
 				try {

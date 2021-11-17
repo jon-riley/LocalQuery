@@ -1,5 +1,7 @@
 package Logic;
 
+import javax.imageio.ImageIO; 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.AccessDeniedException;
@@ -17,6 +19,10 @@ public class FileManager {
 	private File root;
 	private HashSet<Document> documentPaths;
 	private ArrayList<Document> documentMatches;
+	
+//	image file path and buffer image
+	private File userImagePath; 
+	private BufferedImage userImage;
 
 	public FileManager(File root) {
 		if (root.isFile()) {
@@ -25,6 +31,8 @@ public class FileManager {
 		this.documentPaths = new HashSet<Document>();
 		this.root = root;
 		this.documentMatches = this.getFiles();
+		this.userImage = null;
+		this.userImagePath = null;
 	}
 
 	public ArrayList<Document> getFiles() {
@@ -81,7 +89,6 @@ public class FileManager {
 				return d1.getName().compareToIgnoreCase(d2.getName());
 			}
 		});
-
 		if (!ascending)
 			Collections.reverse(documentMatches);
 			return this.documentMatches;
@@ -153,5 +160,26 @@ public class FileManager {
 	public File getRoot() {
 		return this.root;
 	}
-
-}
+	
+	public void setUserImagePath(String imagePath) {
+		setUserImagePath(new File(imagePath));
+	}
+	
+	public void setUserImagePath(File imagePath) {
+		try {
+			this.userImagePath = imagePath;
+			this.userImage = ImageIO.read(imagePath);
+		} catch (IOException e) {
+			System.out.println("File cannot produce BufferedImage object. Check file type.");
+			e.printStackTrace();
+		}
+	}
+	
+	public File getUserImagePath() {
+		return this.userImagePath;
+	}
+	
+	public BufferedImage getUserImage() {
+		return this.userImage;
+	}
+ }
