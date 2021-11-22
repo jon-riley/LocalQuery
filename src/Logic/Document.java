@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Scanner;
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
@@ -69,5 +71,9 @@ public class Document extends File {
 	}
 	
 	// getContentImages - arraylist of bufferedImage objects
+	public void getContentImages(BufferedImage userImage) {
+		ArrayList<BufferedImage> imageList = new ArrayList<BufferedImage>();
+		imageList.add(userImage);
+		}
 	
 }
