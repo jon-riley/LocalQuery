@@ -3,6 +3,7 @@ package Logic;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class App {
@@ -47,7 +48,8 @@ public class App {
 		// Filter all results
 		System.out.println("* * * * * * * * * * * * * * * * * * * * \n Filter by extension: txt, pdf..."); 
 		String ext = sc.nextLine();
-		fm.filterByFileType(ext).forEach(document -> System.out.println(document.getName()));
+		ArrayList<String> testTypes = new ArrayList<>(Arrays.asList(ext));
+		fm.filterByFileType(testTypes).forEach(document -> System.out.println(document.getName()));
 		
 		
 		// Sort all results 

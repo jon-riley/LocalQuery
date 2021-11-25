@@ -1,6 +1,6 @@
 package Logic;
 
-import javax.imageio.ImageIO; 
+import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -10,18 +10,30 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
+import java.util.List;
 
 public class FileManager {
 
+	public static final ArrayList<String> SUPPORTED_FILE_TYPES = new ArrayList<>(
+			Arrays.asList(
+						"pdf", "txt", 
+						"doc", "docx", 
+						"ppt", "pptx", 
+						"csv", "xls", "xlsx", 
+						"jpeg", "jpg", "png"
+					)
+			);
+	
 	private File root;
 	private HashSet<Document> documentPaths;
 	private ArrayList<Document> documentMatches;
-	
+
 //	image file path and buffer image
-	private File userImagePath; 
+	private File userImagePath;
 	private BufferedImage userImage;
 
 	public FileManager(File root) {
@@ -48,7 +60,7 @@ public class FileManager {
 					File fileEntry = path.toFile();
 					Document document = new Document(fileEntry.toString());
 					if (!document.getFileExtension().equals("zip") && document.isDirectory()) {
-							listFilesOfFolder(fileEntry);
+						listFilesOfFolder(fileEntry);
 					}
 					switch (document.getFileExtension()) {
 					case "txt":
@@ -70,10 +82,29 @@ public class FileManager {
 		return this.documentMatches;
 	}
 
-	public ArrayList<Document> filterByFileType(String fileExtension) {
-		ArrayList<Document> filteredList = this.documentMatches;
-		filteredList.removeIf(doc -> !doc.toString().contains(fileExtension));
-		return filteredList;
+	private boolean validateFileExtensions(ArrayList<String> fileExtensions) {
+		for (String fileExtension : fileExtensions) {
+			if (!SUPPORTED_FILE_TYPES.contains(fileExtension)) {
+				System.out.println("A file extension in list is not supported");
+				return false;
+			}
+		}
+		return true;
+	}
+
+	public ArrayList<Document> filterByFileType(ArrayList<String> fileExtensions) {
+		if (validateFileExtensions(fileExtensions)) {
+			ArrayList<Document> filteredList = this.documentMatches;
+			filteredList.removeIf(doc -> {				
+				for (String fileExtension : fileExtensions) {
+					if (doc.toString().contains(fileExtension) && SUPPORTED_FILE_TYPES.contains(fileExtension)) 
+						return false;
+				}
+				return true;
+			});
+			return filteredList;
+		}
+		throw new Error("Could not validate all file types in passed list.");
 	}
 
 	public ArrayList<Document> filterBySize(long sizeMin, long sizeMax) {
@@ -91,7 +122,7 @@ public class FileManager {
 		});
 		if (!ascending)
 			Collections.reverse(documentMatches);
-			return this.documentMatches;
+		return this.documentMatches;
 	}
 
 	public ArrayList<Document> sortByFileType(boolean ascending) {
@@ -160,11 +191,11 @@ public class FileManager {
 	public File getRoot() {
 		return this.root;
 	}
-	
+
 	public void setUserImagePath(String imagePath) {
 		setUserImagePath(new File(imagePath));
 	}
-	
+
 	public void setUserImagePath(File imagePath) {
 		try {
 			this.userImagePath = imagePath;
@@ -174,12 +205,12 @@ public class FileManager {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public File getUserImagePath() {
 		return this.userImagePath;
 	}
-	
+
 	public BufferedImage getUserImage() {
 		return this.userImage;
 	}
- }
+}
