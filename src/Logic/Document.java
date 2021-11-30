@@ -6,10 +6,20 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Scanner;
+
+import javax.imageio.ImageIO;
+
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
+import org.apache.pdfbox.cos.COSName;
 import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageTree;
+import org.apache.pdfbox.pdmodel.graphics.PDXObject;
+import org.apache.pdfbox.pdmodel.graphics.image.PDImage;
+import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
+import org.apache.pdfbox.rendering.PDFRenderer;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.openxml4j.opc.OPCPackage;
@@ -25,6 +35,19 @@ public class Document extends File {
 		super(filePath);
 		this.path = filePath;
 		this.file = new File(this.path);
+	}
+	
+	public String getFilePathWithoutExtension() {
+		String filename = "";
+		try {
+            if (file != null && file.exists()) {
+                String name = file.toString();
+                filename = name.replaceFirst("[.][^.]+$", "");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+		return filename;
 	}
 	
 	public String getFileExtension() {
@@ -70,10 +93,40 @@ public class Document extends File {
 		}
 	}
 	
-	// getContentImages - arraylist of bufferedImage objects
-	public void getContentImages(BufferedImage userImage) {
-		ArrayList<BufferedImage> imageList = new ArrayList<BufferedImage>();
-		imageList.add(userImage);
+	public ArrayList<BufferedImage> getContentImages() {
+		ArrayList<BufferedImage> images = new ArrayList<>();
+		try {
+			switch(this.getFileExtension()) {
+			case "pdf": 
+				PDDocument pdf = PDDocument.load(this.file);
+				for (PDPage page : pdf.getPages()) {
+					for (COSName name : page.getResources().getXObjectNames()) {
+						PDXObject obj = page.getResources().getXObject(name);
+						if (obj instanceof PDImageXObject) {
+							PDImageXObject image = (PDImageXObject)obj;
+							images.add(image.getImage());
+						}
+					}
+				}				
+				pdf.close();
+				break;
+			default:
+				throw new Error("Error: File type not found or supported");
+			}
+		} catch(IOException e) {
+			e.printStackTrace();
 		}
+		return images;
+	}
 	
+	public void extractImages() throws IOException {
+		ArrayList<BufferedImage> images = this.getContentImages();
+		int imageCounter = 1;
+		for (BufferedImage image : images) {
+			String filename = this.getFilePathWithoutExtension() + "-" + imageCounter + ".jpg";
+			ImageIO.write(image, "jpg", new File(filename));
+			imageCounter++;
+		}
+	}
+
 }

@@ -14,6 +14,7 @@ import org.apache.commons.lang3.StringUtils;
 public class Query {
 
 	private String[] keywordsCollection;
+	private String[] imagePathsCollection;
 	private FileManager manager;
 
 	Query(FileManager manager) {
@@ -26,7 +27,7 @@ public class Query {
 		this.setKeywordCollection(keywords);
 		Set<Document> matchingDocuments = new HashSet<>();
 		this.manager.getFiles().forEach(document -> {
-			if (userImage != null) {
+			if (userImage != null) { 
 //				TODO:
 //				extract document images and set to array/arraylist
 //				opencv to compare bufferedimage objects - iterate through array/arraylist and compare to userImage
@@ -99,8 +100,16 @@ public class Query {
 		this.manager = manager;
 	}
 	
+	public void setImagePathsCollection(String[] imagePaths) {
+		this.imagePathsCollection = imagePaths;
+	}
+	
 	public String[] getKeywordCollection() {
 		return this.keywordsCollection;
+	}
+	
+	public String[] getImagePathsCollection() {
+		return this.imagePathsCollection;
 	}
 	
 	public FileManager getManager() {

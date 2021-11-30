@@ -1,10 +1,22 @@
 package Logic;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
+
+import javax.imageio.ImageIO;
+
+import org.apache.pdfbox.cos.COSName;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageTree;
+import org.apache.pdfbox.pdmodel.PDResources;
+import org.apache.pdfbox.pdmodel.graphics.PDXObject;
+import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
+import org.apache.pdfbox.rendering.PDFRenderer;
 
 public class App {
 
@@ -58,6 +70,5 @@ public class App {
 		System.out.println("Sorting by date modified");
 		fm.sortByDateModified(false).forEach(document -> System.out.println(document.getName()));
 		sc.close();
-		
 	}	
 }
