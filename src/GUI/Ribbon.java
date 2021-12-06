@@ -10,9 +10,8 @@ public class Ribbon extends JPanel {
     JTextField rootField;
 
     JButton search;
-    JButton search2;
-    JButton search3;
-    JButton search4;
+    JToggleButton and;
+    JToggleButton caseSens;
     JButton browse;
     JButton directorySearch;
     JButton filterBy;
@@ -42,11 +41,9 @@ public class Ribbon extends JPanel {
         rootField = new JTextField(10);
 
         //create all buttons
+        and = new JToggleButton("AND");
+        caseSens = new JToggleButton("CASE SENSITIVE");
         search = new JButton("Search");
-        search2 = new JButton("Search");
-        search2.setBackground(Color.BLACK);
-        search3 = new JButton("Search");
-        search4 = new JButton("Search");
         browse = new JButton("Browse Images");
         directorySearch = new JButton("Directory Search");
         filterBy = new JButton("Filter By");
@@ -101,9 +98,8 @@ public class Ribbon extends JPanel {
         JMenuBar mb = new JMenuBar();
         mb.add(label);
         mb.add(rootField);
-        mb.add(search2);
-        mb.add(search3);
-        mb.add(search4);
+        mb.add(and);
+        mb.add(caseSens);
         mb.add(search);
         mb.add(browse);
         mb.add(zipPathLabel);
