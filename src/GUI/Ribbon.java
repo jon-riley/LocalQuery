@@ -10,6 +10,9 @@ public class Ribbon extends JPanel {
     JTextField rootField;
 
     JButton search;
+    JButton search2;
+    JButton search3;
+    JButton search4;
     JButton browse;
     JButton directorySearch;
     JButton filterBy;
@@ -35,11 +38,15 @@ public class Ribbon extends JPanel {
         JLabel zipPathLabel = new JLabel(zipPath);
 
         //create all text fields
-        directoryPath = new JTextField();
+        directoryPath = new JTextField(10);
         rootField = new JTextField(10);
 
         //create all buttons
         search = new JButton("Search");
+        search2 = new JButton("Search");
+        search2.setBackground(Color.BLACK);
+        search3 = new JButton("Search");
+        search4 = new JButton("Search");
         browse = new JButton("Browse Images");
         directorySearch = new JButton("Directory Search");
         filterBy = new JButton("Filter By");
@@ -94,6 +101,9 @@ public class Ribbon extends JPanel {
         JMenuBar mb = new JMenuBar();
         mb.add(label);
         mb.add(rootField);
+        mb.add(search2);
+        mb.add(search3);
+        mb.add(search4);
         mb.add(search);
         mb.add(browse);
         mb.add(zipPathLabel);

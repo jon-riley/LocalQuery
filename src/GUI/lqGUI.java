@@ -78,6 +78,10 @@ public class lqGUI extends JPanel {
     //shows files and their info from directory search
     void showFiles() throws IOException {
         updateTable();
+
+        //fix
+
+        fman.setRoot(new File(currentRoot));
         ArrayList<Document> filelist = fman.getFiles();
         int fileCounter = 0;
         table.data = new String[filelist.size()][6];
