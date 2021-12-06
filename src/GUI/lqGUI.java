@@ -13,6 +13,7 @@ public class lqGUI extends JPanel {
     Details details = new Details();
     String currentRoot = "D:/Documents";
     FileManager fman = new FileManager(new File(currentRoot));
+    Query query = new Query(fman);
 
     public lqGUI() {
         setLayout(new BorderLayout());
@@ -25,10 +26,49 @@ public class lqGUI extends JPanel {
 
     //method to add all of the functionality to all of the buttons
     void createButtonListeners() {
-        ribbon.search.addActionListener(e -> searchShowFiles(fman.search(ribbon.rootField.getText(), false, true)));
+        
+        // where to change for the buttons
+        ribbon.and.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                if(ribbon.and.isSelected())
+                    ribbon.and.setText("OR");
+                else
+                    ribbon.and.setText("AND");
+            }
+        });
+
+        ribbon.caseSens.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                if(ribbon.caseSens.isSelected())
+                    ribbon.caseSens.setText("NOT CASE SENSITIVE");
+                else
+                    ribbon.caseSens.setText("CASE SENSITIVE");
+
+                }
+            }
+        );
+
+        ribbon.search.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                Boolean andOperation;
+                if (ribbon.and.getText() == "AND") 
+                    andOperation = true;
+                else
+                    andOperation = false;
+
+                Boolean caseSensitive;
+                if (ribbon.caseSens.getText() == "CASE SENSITIVE") 
+                    caseSensitive = true;
+                else
+                    caseSensitive = false;
+                searchShowFiles(query.search(ribbon.rootField.getText(), andOperation, caseSensitive));
+            }
+        });
+
         ribbon.directorySearch.addActionListener(new ActionListener() { 
             public void actionPerformed(ActionEvent e) {
                 fman.setRoot(new File(ribbon.directoryPath.getText()));
+                query.setManager(fman);
                 currentRoot = ribbon.directoryPath.getText();
                 try {
                     showFiles();
@@ -82,6 +122,7 @@ public class lqGUI extends JPanel {
         //fix
 
         fman.setRoot(new File(currentRoot));
+        query.setManager(fman);
         ArrayList<Document> filelist = fman.getFiles();
         int fileCounter = 0;
         table.data = new String[filelist.size()][6];
@@ -90,7 +131,7 @@ public class lqGUI extends JPanel {
             table.data[fileCounter][1] = new String(filelist.get(i).getLastModified());
             table.data[fileCounter][2] = new String(filelist.get(i).getFileExtension());
             table.data[fileCounter][3] = new String(filelist.get(i).length() + " bytes");
-            table.data[fileCounter][4] = new String("Not Supported");
+            table.data[fileCounter][4] = new String("");
             table.data[fileCounter][5] = new String("Not Supported");
             fileCounter++;
         }
@@ -114,7 +155,7 @@ public class lqGUI extends JPanel {
             table.data[fileCounter][1] = new String(arraylist.get(i).getLastModified());
             table.data[fileCounter][2] = new String(arraylist.get(i).getFileExtension());
             table.data[fileCounter][3] = new String(arraylist.get(i).length() + " bytes");
-            table.data[fileCounter][4] = new String("Not Supported");
+            table.data[fileCounter][4] = new String(query.getTextMatchesByDocument(arraylist.get(i)) + " matches");
             table.data[fileCounter][5] = new String("Not Supported");
             fileCounter++;
         }
@@ -126,4 +167,6 @@ public class lqGUI extends JPanel {
         updateTable();
         ribbon.directoryPath.setText(currentRoot);
     }
-}
+
+    }
+
