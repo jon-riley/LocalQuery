@@ -1,5 +1,6 @@
 package Logic;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -11,7 +12,9 @@ import javax.imageio.ImageIO;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.awt.Color;
+import java.util.List;
 
 import org.apache.pdfbox.cos.COSName;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -27,8 +30,12 @@ import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.apache.poi.xwpf.usermodel.XWPFPictureData;
 import org.apache.poi.hwpf.extractor.Word6Extractor;
 import org.apache.poi.hwpf.extractor.WordExtractor;
+import org.apache.poi.hwpf.model.PicturesTable;
+import org.apache.poi.hwpf.usermodel.Picture;
+import org.apache.poi.hslf.usermodel.HSLFPictureData;
 import org.apache.poi.hwpf.HWPFDocument;
 import org.apache.poi.hwpf.HWPFOldDocument;
 
@@ -91,7 +98,7 @@ public class Document extends File {
         	WordExtractor extractor = null;
 			Word6Extractor extractor6 = null;
        		try { //newer doc file
-            	InputStream fis = new FileInputStream(this.file);
+            	FileInputStream fis = new FileInputStream(this.file);
             	HWPFDocument document = new HWPFDocument(fis);
             	extractor = new WordExtractor(document);
             	String fileData = extractor.getText();
@@ -106,10 +113,9 @@ public class Document extends File {
 				} catch (IOException e) {
             		e.printStackTrace();
         		}
-        	}
-        	
+        	}	
 		case "docx":
-			InputStream inputStream = new FileInputStream(this.file);
+			FileInputStream inputStream = new FileInputStream(this.file);
 			XWPFDocument wordDocument = new XWPFDocument(inputStream);
 			XWPFWordExtractor textExtractor = new XWPFWordExtractor(wordDocument);
 			textContent = textExtractor.getText();
@@ -136,7 +142,30 @@ public class Document extends File {
 					}
 				}				
 				pdf.close();
-				break;
+			case "doc":
+				FileInputStream fis = new FileInputStream(this.file);
+				HWPFDocument wDocument = new HWPFDocument(fis);
+				PicturesTable picturesTable = wDocument.getPicturesTable();
+				List<Picture> piclistDoc= picturesTable.getAllPictures(); 
+				Iterator<Picture> iteratorDoc = piclistDoc.iterator();
+				while(iteratorDoc.hasNext()){
+					Picture pic=iteratorDoc.next();
+					byte[] bytepicDoc=pic.getContent();
+					BufferedImage imag=ImageIO.read(new ByteArrayInputStream(bytepicDoc));
+					images.add(imag);
+					}
+			case "docx":
+				FileInputStream inputStream = new FileInputStream(this.file);
+				XWPFDocument wordDocument = new XWPFDocument(inputStream);
+				List<XWPFPictureData> piclistDocx= wordDocument.getAllPictures(); 
+				Iterator<XWPFPictureData> iteratorDocx = piclistDocx.iterator();
+				while(iteratorDocx.hasNext()){
+					XWPFPictureData pic=iteratorDocx.next();
+					byte[] bytepicDocx=pic.getData();
+					BufferedImage imag=ImageIO.read(new ByteArrayInputStream(bytepicDocx));
+					images.add(imag);
+					}
+			break;
 			default:
 				throw new Error("Error: File type not found or supported");
 			}
@@ -145,6 +174,7 @@ public class Document extends File {
 		}
 		return images;
 	}
+
 	
 	public void extractImages() throws IOException {
 		ArrayList<BufferedImage> images = this.getContentImages();
@@ -166,7 +196,7 @@ public class Document extends File {
      	int w2 = img2.getWidth();
         int h1 = img1.getHeight();
         int h2 = img2.getHeight();
-        if ((w1!=w2)||(h1!=h2)) {
+        if ((w1!=w2)||(h1!=h2)) { //check if images have same dimensions
            System.out.println("Both images should have same dimensions");
 		   return false;
         } else {
