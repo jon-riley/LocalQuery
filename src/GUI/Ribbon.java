@@ -15,7 +15,6 @@ public class Ribbon extends JPanel {
     JButton browse;
     JButton directorySearch;
     JButton filterBy;
-    JButton help;
 
     JMenuItem fileNameA;
     JMenuItem fileNameB;
@@ -47,7 +46,6 @@ public class Ribbon extends JPanel {
         browse = new JButton("Browse Images");
         directorySearch = new JButton("Directory Search");
         filterBy = new JButton("Filter By");
-        help = new JButton("Help");
 
         //create sort by menu
         JMenu sortBy = new JMenu("Sort By");
@@ -105,7 +103,6 @@ public class Ribbon extends JPanel {
         mb.add(zipPathLabel);
         mb.add(sortBy);
         mb.add(filterBy);
-        mb.add(help);
 
         //create JPanel for 
 

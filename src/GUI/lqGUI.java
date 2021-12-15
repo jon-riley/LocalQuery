@@ -11,9 +11,12 @@ public class lqGUI extends JPanel {
     Table table = new Table();
     Ribbon ribbon = new Ribbon();
     Details details = new Details();
+    Filter filter = new Filter();
     String currentRoot = "D:/Documents";
     FileManager fman = new FileManager(new File(currentRoot));
     Query query = new Query(fman);
+    ArrayList<Document> hardlist;
+    int chosenRow;
 
     public lqGUI() {
         setLayout(new BorderLayout());
@@ -61,6 +64,7 @@ public class lqGUI extends JPanel {
                     caseSensitive = true;
                 else
                     caseSensitive = false;
+                    fman.search(ribbon.rootField.getText(), andOperation, caseSensitive);
                 searchShowFiles(query.search(ribbon.rootField.getText(), andOperation, caseSensitive));
             }
         });
@@ -78,8 +82,85 @@ public class lqGUI extends JPanel {
             } 
         });
 
-        //add browse and help buttons
+        ribbon.filterBy.addActionListener(new ActionListener() { 
+            public void actionPerformed(ActionEvent e) {
+                filter.setVisible(true);
+            } 
+        });
 
+        details.openFile.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                Document d = hardlist.get(chosenRow);
+                if(!Desktop.isDesktopSupported()){
+                    System.out.println("Desktop is not supported");
+                    return;
+                }
+                Desktop desk = Desktop.getDesktop();
+                if(d.exists()) {
+                    try {
+                        desk.open(d);
+                    } catch (IOException e1) {
+                        System.out.println("File not found exception");
+                    }
+                }
+            } 
+        });
+
+        details.copyPath.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                Document d = hardlist.get(chosenRow);
+                java.awt.Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new java.awt.datatransfer.StringSelection(d.toString()), null);
+            } 
+        });
+
+        details.extractImages.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                Document d = hardlist.get(chosenRow);
+                
+                try {
+                    d.extractImages();
+                } catch (IOException e1) {
+                    System.out.println("IO Exception: extractImages()");
+                }
+                
+            } 
+        });
+
+
+        filter.apply.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                ArrayList<String> tempRay = new ArrayList<String>();
+                tempRay.add("txt");
+                tempRay.add("pdf");
+
+                //Checks for values in min and max size
+                if(!filter.minSize.getText().isEmpty() && !filter.maxSize.getText().isEmpty()) {
+                    if (filter.minSize.getText().matches("[0-9]+") && filter.maxSize.getText().matches("[0-9]+")){
+
+                        //Different statements for pdf and txt selections if min and max have values
+                        if((filter.pdf.isSelected() && filter.txt.isSelected()) || (!filter.pdf.isSelected() && !filter.txt.isSelected())) {
+                            searchShowFiles(fman.filterBySize(Long.parseLong(filter.minSize.getText()), Long.parseLong(filter.maxSize.getText()), fman.filterByFileType(tempRay)));
+                        } else if(filter.pdf.isSelected() && !filter.txt.isSelected()){
+                            tempRay.remove("txt");
+                            searchShowFiles(fman.filterBySize(Long.parseLong(filter.minSize.getText()), Long.parseLong(filter.maxSize.getText()), fman.filterByFileType(tempRay)));
+                        } else if(!filter.pdf.isSelected() && filter.txt.isSelected()){
+                            tempRay.remove("pdf");
+                            searchShowFiles(fman.filterBySize(Long.parseLong(filter.minSize.getText()), Long.parseLong(filter.maxSize.getText()), fman.filterByFileType(tempRay)));
+                        }
+                    }
+
+                //Different statements for just pdf and txt selections
+                } else if (filter.pdf.isSelected() || filter.txt.isSelected()) {
+                    if(filter.pdf.isSelected() && !filter.txt.isSelected()) {
+                        tempRay.remove("txt");
+                        searchShowFiles(fman.filterByFileType(tempRay));
+                    } else if (!filter.pdf.isSelected() && filter.txt.isSelected()) {
+                        tempRay.remove("pdf");
+                        searchShowFiles(fman.filterByFileType(tempRay));
+                    }
+                }
+            } 
+        });
     }
 
     //method to add all of the functionality to all of the menu items
@@ -104,6 +185,19 @@ public class lqGUI extends JPanel {
         //.matchedKeyImagesB.addActionListener(e -> searchShowFiles(fman.sortByFileName(false)));
     }
 
+    void clickTable() {
+        table.fileData.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                chosenRow = table.fileData.rowAtPoint(evt.getPoint());
+                if (chosenRow >= 0) {
+                    // set the Jlabel in the details panel to the selected file name
+                    details.selectedFileName.setText(table.fileData.getValueAt(chosenRow, 0).toString());
+                }
+            }
+        });
+    }
+
     //method to update the table
     void updateTable() {
         remove(table.jspTable);
@@ -112,6 +206,7 @@ public class lqGUI extends JPanel {
         table.fileData.setDefaultEditor(Object.class, null);
         setVisible(false);
         add(table.jspTable, BorderLayout.CENTER);
+        clickTable();
         setVisible(true);
     }
     
@@ -119,11 +214,10 @@ public class lqGUI extends JPanel {
     void showFiles() throws IOException {
         updateTable();
 
-        //fix
-
         fman.setRoot(new File(currentRoot));
         query.setManager(fman);
         ArrayList<Document> filelist = fman.getFiles();
+        hardlist = filelist;
         int fileCounter = 0;
         table.data = new String[filelist.size()][6];
         for (int i = 0; i < filelist.size(); i++) {
@@ -146,8 +240,9 @@ public class lqGUI extends JPanel {
 
     //shows sorted files
     void searchShowFiles(ArrayList<Document> arraylist) {
-        updateTable();
+        //updateTable();
 
+        hardlist = arraylist;
         int fileCounter = 0;
         table.data = new String[arraylist.size()][6];
         for (int i = 0; i < arraylist.size(); i++) {
@@ -155,7 +250,12 @@ public class lqGUI extends JPanel {
             table.data[fileCounter][1] = new String(arraylist.get(i).getLastModified());
             table.data[fileCounter][2] = new String(arraylist.get(i).getFileExtension());
             table.data[fileCounter][3] = new String(arraylist.get(i).length() + " bytes");
-            table.data[fileCounter][4] = new String(query.getTextMatchesByDocument(arraylist.get(i)) + " matches");
+            if (query.getKeywordCollection() != null) {
+                table.data[fileCounter][4] = new String(query.getTextMatchesByDocument(arraylist.get(i)) + " matches");
+            }  
+            else {
+                table.data[fileCounter][4] = new String("");
+            }
             table.data[fileCounter][5] = new String("Not Supported");
             fileCounter++;
         }
