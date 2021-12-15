@@ -107,10 +107,9 @@ public class FileManager {
 		throw new Error("Could not validate all file types in passed list.");
 	}
 
-	public ArrayList<Document> filterBySize(long sizeMin, long sizeMax) {
-		ArrayList<Document> filteredList = this.documentMatches;
-		filteredList.removeIf(doc -> doc.length() < sizeMin || doc.length() > sizeMax);
-		return filteredList;
+	public ArrayList<Document> filterBySize(long sizeMin, long sizeMax, ArrayList<Document> tempList) {
+		tempList.removeIf(doc -> doc.length() < sizeMin || doc.length() > sizeMax);
+		return tempList;
 	}
 
 	public ArrayList<Document> sortByFileName(boolean ascending) {
