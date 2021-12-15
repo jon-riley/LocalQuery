@@ -123,13 +123,6 @@ public class Document extends File {
 	   		String allTextContentInSlideShow = slideShowExtractor.getText();
 			slideShowExtractor.close();
 	   		return allTextContentInSlideShow;
-		case "xls":
-			FileInputStream isxls = new FileInputStream(this.file);
-			HSSFWorkbook xlsFile = new HSSFWorkbook(isxls);
-			ExcelExtractor xlsText = new ExcelExtractor(xlsFile);
-			String xlsContent = xlsText.getText();
-			xlsText.close();
-			return xlsContent;
 		case "xlsx":
 			FileInputStream isxlsx = new FileInputStream(this.file);
 			XSSFWorkbook xlsxFile = new XSSFWorkbook(isxlsx);
@@ -159,18 +152,7 @@ public class Document extends File {
 					}
 				}				
 				pdf.close();
-			case "doc":
-				FileInputStream fis = new FileInputStream(this.file);
-				HWPFDocument wDocument = new HWPFDocument(fis);
-				PicturesTable picturesTable = wDocument.getPicturesTable();
-				List<Picture> piclistDoc= picturesTable.getAllPictures(); 
-				Iterator<Picture> iteratorDoc = piclistDoc.iterator();
-				while(iteratorDoc.hasNext()){
-					Picture pic=iteratorDoc.next();
-					byte[] bytepicDoc=pic.getContent();
-					BufferedImage image=ImageIO.read(new ByteArrayInputStream(bytepicDoc));
-					images.add(image);
-					}
+				break;
 			case "docx":
 				FileInputStream inputStream = new FileInputStream(this.file);
 				XWPFDocument wordDocument = new XWPFDocument(inputStream);
@@ -189,27 +171,18 @@ public class Document extends File {
 				BufferedImage image=ImageIO.read(new ByteArrayInputStream(bytes));
 					images.add(image);
 				}
-			case "xls":
-				FileInputStream isxls = new FileInputStream(this.file);
-				HSSFWorkbook workbookXLS = new HSSFWorkbook(isxls);
-				List<HSSFPictureData> listXLS = workbookXLS.getAllPictures();
-				for (int i=0; i<listXLS.size(); i++) {
-					PictureData picture = (PictureData) listXLS.get(i);
-					byte[] bytes = picture.getData();
-					BufferedImage image=ImageIO.read(new ByteArrayInputStream(bytes));
-					images.add(image);
-				}
+				break;
 			case "xlsx":
-			FileInputStream isxlsx = new FileInputStream(this.file);
-			XSSFWorkbook workbookXLSX = new XSSFWorkbook(isxlsx);
-				List<XSSFPictureData> listXLSX = workbookXLSX.getAllPictures();
-				for (int i=0; i<listXLSX.size(); i++) {
-					PictureData picture = (PictureData) listXLSX.get(i);
-					byte[] bytes = picture.getData();
-					BufferedImage image=ImageIO.read(new ByteArrayInputStream(bytes));
-					images.add(image);
-				}
-			break;
+				FileInputStream isxlsx = new FileInputStream(this.file);
+				XSSFWorkbook workbookXLSX = new XSSFWorkbook(isxlsx);
+					List<XSSFPictureData> listXLSX = workbookXLSX.getAllPictures();
+					for (int i=0; i<listXLSX.size(); i++) {
+						PictureData picture = (PictureData) listXLSX.get(i);
+						byte[] bytes = picture.getData();
+						BufferedImage image=ImageIO.read(new ByteArrayInputStream(bytes));
+						images.add(image);
+					}
+				break;
 			default:
 				throw new Error("Error: File type not found or supported");
 			}
@@ -231,7 +204,7 @@ public class Document extends File {
 		return;
 	}
 
-	public boolean compareImages() throws IOException {
+	public boolean compareImages(BufferedImage userInputImage) throws IOException {
 		//replace with user image
 		BufferedImage img1 = ImageIO.read(new File("D:\\Images\\test1.jpg"));
 		//replace with document image

@@ -21,10 +21,9 @@ public class FileManager {
 	public static final ArrayList<String> SUPPORTED_FILE_TYPES = new ArrayList<>(
 			Arrays.asList(
 						"pdf", "txt", 
-						"doc", "docx", 
-						"ppt", "pptx", 
-						"csv", "xls", "xlsx", 
-						"jpeg", "jpg", "png"
+						"docx", 
+						"pptx", 
+						"xlsx"
 					)
 			);
 	
@@ -65,8 +64,9 @@ public class FileManager {
 					switch (document.getFileExtension()) {
 					case "txt":
 					case "pdf":
-					case "doc":
 					case "docx":
+					case "xlsx":
+					case "pptx":
 						this.documentPaths.add(new Document(fileEntry.toString()));
 					}
 				});

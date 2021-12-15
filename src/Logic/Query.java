@@ -96,7 +96,22 @@ public class Query {
 				matches++;
 			return matches;
 		} catch (IOException e) {
-			System.out.println("Error: File not found or supported.");
+			System.err.println("Error: File not found or supported.");
+			e.printStackTrace();
+		}
+		return 0;
+	}
+	
+	public int getImageMatchesByDocument(Document document) {
+		try {
+			int matches = 0;
+			for (BufferedImage image : document.getContentImages()) {
+				if (document.compareImages(image))
+					matches++;
+			}
+			return matches;
+		} catch (IOException e) {
+			System.err.println("Error: File not found or supported.");
 			e.printStackTrace();
 		}
 		return 0;
