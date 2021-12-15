@@ -38,8 +38,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFPictureData;
-<<<<<<< HEAD
-=======
+
 import org.apache.poi.hwpf.extractor.Word6Extractor;
 import org.apache.poi.hwpf.extractor.WordExtractor;
 import org.apache.poi.hwpf.model.PicturesTable;
@@ -53,8 +52,6 @@ import org.apache.poi.xslf.usermodel.*;
 import org.apache.poi.sl.usermodel.PictureData;
 import org.apache.poi.sl.usermodel.SlideShow;
 import org.apache.poi.sl.extractor.SlideShowExtractor;
-
->>>>>>> 3edc471b1bdb52ca2b4def815826cbec8e6a5b3b
 
 public class Document extends File {
 	
@@ -162,8 +159,6 @@ public class Document extends File {
 					}
 				}				
 				pdf.close();
-<<<<<<< HEAD
-=======
 			case "doc":
 				FileInputStream fis = new FileInputStream(this.file);
 				HWPFDocument wDocument = new HWPFDocument(fis);
@@ -176,7 +171,6 @@ public class Document extends File {
 					BufferedImage image=ImageIO.read(new ByteArrayInputStream(bytepicDoc));
 					images.add(image);
 					}
->>>>>>> 3edc471b1bdb52ca2b4def815826cbec8e6a5b3b
 			case "docx":
 				FileInputStream inputStream = new FileInputStream(this.file);
 				XWPFDocument wordDocument = new XWPFDocument(inputStream);
