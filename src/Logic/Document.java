@@ -28,9 +28,33 @@ import org.apache.pdfbox.text.PDFTextStripper;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
+import org.apache.poi.xslf.usermodel.XMLSlideShow;
+import org.apache.poi.xslf.usermodel.XSLFPictureData;
+import org.apache.poi.xslf.usermodel.XSLFShape;
+import org.apache.poi.xssf.extractor.XSSFExcelExtractor;
+import org.apache.poi.xssf.usermodel.XSSFPictureData;
+import org.apache.poi.xssf.usermodel.XSSFShape;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFPictureData;
+<<<<<<< HEAD
+=======
+import org.apache.poi.hwpf.extractor.Word6Extractor;
+import org.apache.poi.hwpf.extractor.WordExtractor;
+import org.apache.poi.hwpf.model.PicturesTable;
+import org.apache.poi.hwpf.usermodel.Picture;
+import org.apache.poi.hssf.extractor.ExcelExtractor;
+import org.apache.poi.hssf.usermodel.HSSFPictureData;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.hwpf.HWPFDocument;
+import org.apache.poi.hwpf.HWPFOldDocument;
+import org.apache.poi.xslf.usermodel.*;
+import org.apache.poi.sl.usermodel.PictureData;
+import org.apache.poi.sl.usermodel.SlideShow;
+import org.apache.poi.sl.extractor.SlideShowExtractor;
+
+>>>>>>> 3edc471b1bdb52ca2b4def815826cbec8e6a5b3b
 
 public class Document extends File {
 	
@@ -93,6 +117,30 @@ public class Document extends File {
 			textContent = textExtractor.getText();
 			textExtractor.close();
 			return textContent;
+		case "pptx":
+			SlideShow<XSLFShape,XSLFTextParagraph> slideshow = new XMLSlideShow(new FileInputStream(this.file));
+	   		SlideShowExtractor<XSLFShape,XSLFTextParagraph> slideShowExtractor = new SlideShowExtractor<XSLFShape,XSLFTextParagraph>(slideshow);
+	   		slideShowExtractor.setCommentsByDefault(true);
+	   		slideShowExtractor.setMasterByDefault(true);
+	   		slideShowExtractor.setNotesByDefault(true);
+	   		String allTextContentInSlideShow = slideShowExtractor.getText();
+			slideShowExtractor.close();
+	   		return allTextContentInSlideShow;
+		case "xls":
+			FileInputStream isxls = new FileInputStream(this.file);
+			HSSFWorkbook xlsFile = new HSSFWorkbook(isxls);
+			ExcelExtractor xlsText = new ExcelExtractor(xlsFile);
+			String xlsContent = xlsText.getText();
+			xlsText.close();
+			return xlsContent;
+		case "xlsx":
+			FileInputStream isxlsx = new FileInputStream(this.file);
+			XSSFWorkbook xlsxFile = new XSSFWorkbook(isxlsx);
+			XSSFExcelExtractor xlsxText = new XSSFExcelExtractor(xlsxFile);
+			xlsxText.setFormulasNotResults(true);
+			String xlsxContent = xlsxText.getText();
+			xlsxText.close();
+			return xlsxContent;
 		default:
 			throw new Error("Error: File type not found or supported.");
 		}
@@ -114,6 +162,21 @@ public class Document extends File {
 					}
 				}				
 				pdf.close();
+<<<<<<< HEAD
+=======
+			case "doc":
+				FileInputStream fis = new FileInputStream(this.file);
+				HWPFDocument wDocument = new HWPFDocument(fis);
+				PicturesTable picturesTable = wDocument.getPicturesTable();
+				List<Picture> piclistDoc= picturesTable.getAllPictures(); 
+				Iterator<Picture> iteratorDoc = piclistDoc.iterator();
+				while(iteratorDoc.hasNext()){
+					Picture pic=iteratorDoc.next();
+					byte[] bytepicDoc=pic.getContent();
+					BufferedImage image=ImageIO.read(new ByteArrayInputStream(bytepicDoc));
+					images.add(image);
+					}
+>>>>>>> 3edc471b1bdb52ca2b4def815826cbec8e6a5b3b
 			case "docx":
 				FileInputStream inputStream = new FileInputStream(this.file);
 				XWPFDocument wordDocument = new XWPFDocument(inputStream);
@@ -122,9 +185,36 @@ public class Document extends File {
 				while(iteratorDocx.hasNext()){
 					XWPFPictureData pic=iteratorDocx.next();
 					byte[] bytepicDocx=pic.getData();
-					BufferedImage imag=ImageIO.read(new ByteArrayInputStream(bytepicDocx));
-					images.add(imag);
+					BufferedImage image=ImageIO.read(new ByteArrayInputStream(bytepicDocx));
+					images.add(image);
 					}
+			case "pptx":
+				XMLSlideShow ppt = new XMLSlideShow(new FileInputStream(this.file));
+				for(XSLFPictureData data : ppt.getPictureData()){
+				byte[] bytes = data.getData();
+				BufferedImage image=ImageIO.read(new ByteArrayInputStream(bytes));
+					images.add(image);
+				}
+			case "xls":
+				FileInputStream isxls = new FileInputStream(this.file);
+				HSSFWorkbook workbookXLS = new HSSFWorkbook(isxls);
+				List<HSSFPictureData> listXLS = workbookXLS.getAllPictures();
+				for (int i=0; i<listXLS.size(); i++) {
+					PictureData picture = (PictureData) listXLS.get(i);
+					byte[] bytes = picture.getData();
+					BufferedImage image=ImageIO.read(new ByteArrayInputStream(bytes));
+					images.add(image);
+				}
+			case "xlsx":
+			FileInputStream isxlsx = new FileInputStream(this.file);
+			XSSFWorkbook workbookXLSX = new XSSFWorkbook(isxlsx);
+				List<XSSFPictureData> listXLSX = workbookXLSX.getAllPictures();
+				for (int i=0; i<listXLSX.size(); i++) {
+					PictureData picture = (PictureData) listXLSX.get(i);
+					byte[] bytes = picture.getData();
+					BufferedImage image=ImageIO.read(new ByteArrayInputStream(bytes));
+					images.add(image);
+				}
 			break;
 			default:
 				throw new Error("Error: File type not found or supported");
