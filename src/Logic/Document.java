@@ -27,10 +27,10 @@ import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
-import org.apache.poi.hwpf.extractor.Word6Extractor;
-import org.apache.poi.hwpf.extractor.WordExtractor;
-import org.apache.poi.hwpf.HWPFDocument;
-import org.apache.poi.hwpf.HWPFOldDocument;
+//import org.apache.poi.hwpf.extractor.Word6Extractor;
+//import org.apache.poi.hwpf.extractor.WordExtractor;
+//import org.apache.poi.hwpf.HWPFDocument;
+//import org.apache.poi.hwpf.HWPFOldDocument;
 
 
 public class Document extends File {
@@ -87,27 +87,26 @@ public class Document extends File {
 			textContent = textStripper.getText(pdf);		
 			pdf.close();
 			return textContent;
-		case "doc":
-        	WordExtractor extractor = null;
-			Word6Extractor extractor6 = null;
-       		try { //newer doc file
-            	InputStream fis = new FileInputStream(this.file);
-            	HWPFDocument document = new HWPFDocument(fis);
-            	extractor = new WordExtractor(document);
-            	String fileData = extractor.getText();
-            	return fileData;
-        	} catch (Exception old) {
-            	try { //pre-2007 doc file
-            		POIFSFileSystem fis = new POIFSFileSystem(this.file);
-            		HWPFOldDocument document = new HWPFOldDocument(fis);
-            		extractor6 = new Word6Extractor(document);
-            		String fileData = extractor6.getText();
-            		return fileData;
-				} catch (IOException e) {
-            		e.printStackTrace();
-        		}
-        	}
-        	
+//		case "doc":
+//        	WordExtractor extractor = null;
+//			Word6Extractor extractor6 = null;
+//       		try { //newer doc file
+//            	InputStream fis = new FileInputStream(this.file);
+//            	HWPFDocument document = new HWPFDocument(fis);
+//            	extractor = new WordExtractor(document);
+//            	String fileData = extractor.getText();
+//            	return fileData;
+//        	} catch (Exception old) {
+//            	try { //pre-2007 doc file
+//            		POIFSFileSystem fis = new POIFSFileSystem(this.file);
+//            		HWPFOldDocument document = new HWPFOldDocument(fis);
+//            		extractor6 = new Word6Extractor(document);
+//            		String fileData = extractor6.getText();
+//            		return fileData;
+//				} catch (IOException e) {
+//            		e.printStackTrace();
+//        		}
+//        	}
 		case "docx":
 			InputStream inputStream = new FileInputStream(this.file);
 			XWPFDocument wordDocument = new XWPFDocument(inputStream);

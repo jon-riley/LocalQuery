@@ -17,7 +17,7 @@ public class Query {
 	private String[] imagePathsCollection;
 	private FileManager manager;
 
-	Query(FileManager manager) {
+	public Query(FileManager manager) {
 		this.manager = manager;
 		this.keywordsCollection = null;
 	}

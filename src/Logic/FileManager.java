@@ -65,8 +65,8 @@ public class FileManager {
 					switch (document.getFileExtension()) {
 					case "txt":
 					case "pdf":
-						// case "doc":
-						// case "docx":
+//					case "doc":
+//					case "docx":
 						this.documentPaths.add(new Document(fileEntry.toString()));
 					}
 				});
