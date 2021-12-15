@@ -144,6 +144,7 @@ public class Document extends File {
 			ImageIO.write(image, "jpg", new File(filename));
 			imageCounter++;
 		}
+		return;
 	}
 
 	public boolean compareImages() throws IOException {

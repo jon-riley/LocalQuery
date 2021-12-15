@@ -77,6 +77,14 @@ public class Query {
 		return new ArrayList<Document>(matchingDocuments);
 	}	
 	
+	private boolean filenameMatchesKeywords(Document document) {
+		for (String keyword : this.keywordsCollection) {
+			if (document.getName().contains(keyword))
+				return true;
+		}
+		return false;
+	}
+	
 	public int getTextMatchesByDocument(Document document) {
 		try {
 			String content = document.getContentText();
@@ -84,6 +92,8 @@ public class Query {
 			for (String keyword : this.keywordsCollection) {
 				matches += StringUtils.countMatches(content, keyword);
 			}
+			if (filenameMatchesKeywords(document)) 
+				matches++;
 			return matches;
 		} catch (IOException e) {
 			System.out.println("Error: File not found or supported.");
