@@ -124,13 +124,13 @@ public class Document extends File {
 			slideShowExtractor.close();
 	   		return allTextContentInSlideShow;
 		case "xlsx":
-			FileInputStream isxlsx = new FileInputStream(this.file);
-			XSSFWorkbook xlsxFile = new XSSFWorkbook(isxlsx);
-			XSSFExcelExtractor xlsxText = new XSSFExcelExtractor(xlsxFile);
-			xlsxText.setFormulasNotResults(true);
-			String xlsxContent = xlsxText.getText();
-			xlsxText.close();
-			return xlsxContent;
+//			FileInputStream isxlsx = new FileInputStream(this.file);
+//			XSSFWorkbook xlsxFile = new XSSFWorkbook(isxlsx);
+//			XSSFExcelExtractor xlsxText = new XSSFExcelExtractor(xlsxFile);
+//			xlsxText.setFormulasNotResults(true);
+//			String xlsxContent = xlsxText.getText();
+//			xlsxText.close();
+//			return xlsxContent;
 		default:
 			throw new Error("Error: File type not found or supported.");
 		}
