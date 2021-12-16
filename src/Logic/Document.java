@@ -141,6 +141,8 @@ public class Document extends File {
 		ArrayList<BufferedImage> images = new ArrayList<>();
 		try {
 			switch (this.getFileExtension()) {
+			case "txt":
+				break;
 			case "pdf":
 				PDDocument pdf = PDDocument.load(this.file);
 				for (PDPage page : pdf.getPages()) {
@@ -186,6 +188,7 @@ public class Document extends File {
 				}
 				break;
 			default:
+				System.out.println("document is " + this.toString());
 				throw new Error("Error: File type not found or supported");
 			}
 		} catch (IOException e) {
@@ -206,6 +209,9 @@ public class Document extends File {
 	}
 
 	public int compareImages(BufferedImage userInputImage) throws IOException {
+		if (this.getContentImages().size() == 0) {
+			return 0;
+		}
 		int similarCounter = 0;
 		for (BufferedImage img : this.getContentImages()) {
 			int w1 = userInputImage.getWidth();
@@ -213,8 +219,7 @@ public class Document extends File {
 			int h1 = userInputImage.getHeight();
 			int h2 = img.getHeight();
 			if ((w1 != w2) || (h1 != h2)) { // check if images have same dimensions
-				System.out.println("Both images should have same dimensions");
-//				new Error("Error: Image are not the same dimensions.");
+				
 			} else {
 				long diff = 0;
 				for (int j = 0; j < h1; j++) {
@@ -237,11 +242,9 @@ public class Document extends File {
 				}
 				double avg = diff / (w1 * h1 * 3);
 				double percentage = (avg / 255) * 100;
-				System.out.println("Difference: " + percentage);
 
-				// if similarity is above 70% then it's a match (can change easily)
 				if (percentage <= 5) {
-					return similarCounter++;
+					similarCounter++;
 				}
 			}
 		}

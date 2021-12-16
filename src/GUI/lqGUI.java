@@ -62,7 +62,6 @@ public class lqGUI extends JPanel {
                     caseSensitive = true;
                 else
                     caseSensitive = false;
-                    fman.search(ribbon.rootField.getText(), andOperation, caseSensitive);
                     searchShowFiles(query.search(ribbon.rootField.getText(), andOperation, caseSensitive));
             }
         });
@@ -269,26 +268,17 @@ public class lqGUI extends JPanel {
             else {
                 table.data[fileCounter][4] = new String("");
             }
-<<<<<<< HEAD
-            // ???
-//            if (query.getImagePathsCollection() != null) {
-//                System.out.println("did get here");
-//                table.data[fileCounter][5] = new String(query.getImageMatchesByDocument(arraylist.get(i)) + " matches");
-//            }  
-//            else {
-//                System.out.println("got here");
-//                table.data[fileCounter][5] = new String("0");
-//            }
-//            fileCounter++;
-=======
-            if (query.getImagePathsCollection() != null) {
-                table.data[fileCounter][5] = new String(query.getImageMatchesByDocument(arraylist.get(i)) + " matches");
+            if (query.getManager().getUserImage() != null) {
+                try {
+					table.data[fileCounter][5] = new String(query.getImageMatchesByDocument(arraylist.get(i)) + " matches");
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
             }  
             else {
                 table.data[fileCounter][5] = new String("");
             }
             fileCounter++;
->>>>>>> 2c68285e88c4d89eb6bd9f2d56547cc7c2d62a4b
         }
 
         String dataTemp[][] = new String[fileCounter][6];

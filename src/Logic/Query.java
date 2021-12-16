@@ -106,6 +106,10 @@ public class Query {
 		}
 		return 0;
 	}
+	
+	public int getImageMatchesByDocument(Document document) throws IOException {
+		return document.compareImages(this.manager.getUserImage());
+	}
 
 	public void setKeywordCollection(String delimitedKeywords) {
 		this.keywordsCollection = delimitedKeywords.trim().split("\\s*,\\s*");

@@ -191,6 +191,8 @@ public class FileManager {
 	}
 
 	public void setUserImagePath(File imagePath) {
+		if (!imagePath.isFile())
+			return;
 		try {
 			this.userImagePath = imagePath;
 			this.userImage = ImageIO.read(imagePath);
