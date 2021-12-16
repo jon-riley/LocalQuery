@@ -54,7 +54,7 @@ public class Ribbon extends JPanel {
         Dimension d2 = new Dimension(300,25);
         directorySearch.setPreferredSize(d2);
         filterBy = new JButton("Filter By");
-        imageSearch = new JButton("Image Search");
+        imageSearch = new JButton("Select Image Path");
         imageSearch.setPreferredSize(d2);
 
         //create sort by menu
