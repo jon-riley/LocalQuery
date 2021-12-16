@@ -172,43 +172,6 @@ public class lqGUI extends JPanel {
                     }
                     searchShowFiles(fman.filterByFileType(tempRay));
                 }
-
-
-
-
-
-
-
-
-
-                //Checks for values in min and max size
-                /*
-                if(!filter.minSize.getText().isEmpty() && !filter.maxSize.getText().isEmpty()) {
-                    if (filter.minSize.getText().matches("[0-9]+") && filter.maxSize.getText().matches("[0-9]+")){
-
-                        //Different statements for pdf and txt selections if min and max have values
-                        if((filter.pdf.isSelected() && filter.txt.isSelected()) || (!filter.pdf.isSelected() && !filter.txt.isSelected())) {
-                            searchShowFiles(fman.filterBySize(Long.parseLong(filter.minSize.getText()), Long.parseLong(filter.maxSize.getText()), fman.filterByFileType(tempRay)));
-                        } else if(filter.pdf.isSelected() && !filter.txt.isSelected()){
-                            tempRay.remove("txt");
-                            searchShowFiles(fman.filterBySize(Long.parseLong(filter.minSize.getText()), Long.parseLong(filter.maxSize.getText()), fman.filterByFileType(tempRay)));
-                        } else if(!filter.pdf.isSelected() && filter.txt.isSelected()){
-                            tempRay.remove("pdf");
-                            searchShowFiles(fman.filterBySize(Long.parseLong(filter.minSize.getText()), Long.parseLong(filter.maxSize.getText()), fman.filterByFileType(tempRay)));
-                        }
-                    }
-
-                //Different statements for just pdf and txt selections
-                } else if (filter.pdf.isSelected() || filter.txt.isSelected()) {
-                    if(filter.pdf.isSelected() && !filter.txt.isSelected()) {
-                        tempRay.remove("txt");
-                        searchShowFiles(fman.filterByFileType(tempRay));
-                    } else if (!filter.pdf.isSelected() && filter.txt.isSelected()) {
-                        tempRay.remove("pdf");
-                        searchShowFiles(fman.filterByFileType(tempRay));
-                    }
-                }
-                */
             } 
         });
     }
@@ -306,6 +269,7 @@ public class lqGUI extends JPanel {
             else {
                 table.data[fileCounter][4] = new String("");
             }
+<<<<<<< HEAD
             // ???
 //            if (query.getImagePathsCollection() != null) {
 //                System.out.println("did get here");
@@ -316,6 +280,15 @@ public class lqGUI extends JPanel {
 //                table.data[fileCounter][5] = new String("0");
 //            }
 //            fileCounter++;
+=======
+            if (query.getImagePathsCollection() != null) {
+                table.data[fileCounter][5] = new String(query.getImageMatchesByDocument(arraylist.get(i)) + " matches");
+            }  
+            else {
+                table.data[fileCounter][5] = new String("");
+            }
+            fileCounter++;
+>>>>>>> 2c68285e88c4d89eb6bd9f2d56547cc7c2d62a4b
         }
 
         String dataTemp[][] = new String[fileCounter][6];
