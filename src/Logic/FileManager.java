@@ -21,9 +21,10 @@ public class FileManager {
 	public static final ArrayList<String> SUPPORTED_FILE_TYPES = new ArrayList<>(
 			Arrays.asList(
 						"pdf", "txt", 
-						"docx", 
-						"pptx", 
-						"xlsx"
+						"doc", "docx", 
+						"ppt", "pptx", 
+						"csv", "xls", "xlsx", 
+						"jpeg", "jpg", "png"
 					)
 			);
 	
@@ -64,9 +65,8 @@ public class FileManager {
 					switch (document.getFileExtension()) {
 					case "txt":
 					case "pdf":
-					case "docx":
-					case "xlsx":
-					case "pptx":
+//					case "doc":
+//					case "docx":
 						this.documentPaths.add(new Document(fileEntry.toString()));
 					}
 				});
@@ -107,9 +107,10 @@ public class FileManager {
 		throw new Error("Could not validate all file types in passed list.");
 	}
 
-	public ArrayList<Document> filterBySize(long sizeMin, long sizeMax, ArrayList<Document> tempList) {
-		tempList.removeIf(doc -> doc.length() < sizeMin || doc.length() > sizeMax);
-		return tempList;
+	public ArrayList<Document> filterBySize(long sizeMin, long sizeMax) {
+		ArrayList<Document> filteredList = this.documentMatches;
+		filteredList.removeIf(doc -> doc.length() < sizeMin || doc.length() > sizeMax);
+		return filteredList;
 	}
 
 	public ArrayList<Document> sortByFileName(boolean ascending) {
