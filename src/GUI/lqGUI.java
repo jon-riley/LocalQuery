@@ -306,15 +306,16 @@ public class lqGUI extends JPanel {
             else {
                 table.data[fileCounter][4] = new String("");
             }
-            if (query.getImagePathsCollection() != null) {
-                System.out.println("did get here");
-                table.data[fileCounter][5] = new String(query.getImageMatchesByDocument(arraylist.get(i)) + " matches");
-            }  
-            else {
-                System.out.println("got here");
-                table.data[fileCounter][5] = new String("0");
-            }
-            fileCounter++;
+            // ???
+//            if (query.getImagePathsCollection() != null) {
+//                System.out.println("did get here");
+//                table.data[fileCounter][5] = new String(query.getImageMatchesByDocument(arraylist.get(i)) + " matches");
+//            }  
+//            else {
+//                System.out.println("got here");
+//                table.data[fileCounter][5] = new String("0");
+//            }
+//            fileCounter++;
         }
 
         String dataTemp[][] = new String[fileCounter][6];

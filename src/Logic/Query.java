@@ -14,20 +14,29 @@ import org.apache.commons.lang3.StringUtils;
 public class Query {
 
 	private String[] keywordsCollection;
-	private String[] imagePathsCollection;
+	private String imagePath;
 	private FileManager manager;
 
 	public Query(FileManager manager) {
 		this.manager = manager;
 		this.keywordsCollection = null;
+		this.imagePath = null;
 	}
 	
 	public ArrayList<Document> search(String keywords, boolean andOperation, boolean exactOperation) {
-		BufferedImage userImage = this.manager.getUserImage(); 	// check against file manager's bufferedimage for extracted images from file
+		BufferedImage userImage = this.manager.getUserImage();		
+		
 		this.setKeywordCollection(keywords);
 		Set<Document> matchingDocuments = new HashSet<>();
 		this.manager.getFiles().forEach(document -> {
-			if (userImage != null) { 
+			if (userImage != null && this.manager.getUserImagePath().isFile()) { 
+					try {
+						if (document.compareImages(userImage) > 0) {
+							matchingDocuments.add(document);
+						}
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
 			}
 			int matchCounter = 0;
 			for (String keyword : this.keywordsCollection) {
@@ -81,7 +90,7 @@ public class Query {
 		return false;
 	}
 	
-	public int getTextMatchesByDocument(Document document) {
+	public int getTextMatchesByDocument(Document document) {		
 		try {
 			String content = document.getContentText();
 			int matches = 0;
@@ -90,21 +99,6 @@ public class Query {
 			}
 			if (filenameMatchesKeywords(document)) 
 				matches++;
-			return matches;
-		} catch (IOException e) {
-			System.err.println("Error: File not found or supported.");
-			e.printStackTrace();
-		}
-		return 0;
-	}
-	
-	public int getImageMatchesByDocument(Document document) {
-		try {
-			int matches = 0;
-			for (BufferedImage image : document.getContentImages()) {
-				if (document.compareImages(image))
-					matches++;
-			}
 			return matches;
 		} catch (IOException e) {
 			System.err.println("Error: File not found or supported.");
@@ -121,16 +115,8 @@ public class Query {
 		this.manager = manager;
 	}
 	
-	public void setImagePathsCollection(String[] imagePaths) {
-		this.imagePathsCollection = imagePaths;
-	}
-	
 	public String[] getKeywordCollection() {
 		return this.keywordsCollection;
-	}
-	
-	public String[] getImagePathsCollection() {
-		return this.imagePathsCollection;
 	}
 	
 	public FileManager getManager() {

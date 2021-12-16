@@ -19,13 +19,7 @@ import java.util.List;
 public class FileManager {
 
 	public static final ArrayList<String> SUPPORTED_FILE_TYPES = new ArrayList<>(
-			Arrays.asList(
-						"pdf", "txt", 
-						"doc", "docx", 
-						"ppt", "pptx", 
-						"csv", "xls", "xlsx", 
-						"jpeg", "jpg", "png"
-					)
+			Arrays.asList("pdf", "txt", "docx", "pptx", "xlsx")
 			);
 	
 	private File root;
@@ -59,13 +53,15 @@ public class FileManager {
 				ds.forEach(path -> {
 					File fileEntry = path.toFile();
 					Document document = new Document(fileEntry.toString());
-					if (!document.getFileExtension().equals("zip") && document.isDirectory()) {
+					if (!document.getFileExtension().equals("zip") && document.isDirectory() && !document.getName().contains("~$")) {
 						listFilesOfFolder(fileEntry);
 					}
 					switch (document.getFileExtension()) {
 					case "txt":
 					case "pdf":
 					case "docx":
+					case "xlsx":
+					case "pptx":
 						this.documentPaths.add(new Document(fileEntry.toString()));
 					}
 				});
