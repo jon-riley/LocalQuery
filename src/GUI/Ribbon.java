@@ -36,7 +36,9 @@ public class Ribbon extends JPanel {
         JLabel zipPathLabel = new JLabel(zipPath);
 
         //create all text fields
-        directoryPath = new JTextField(10);
+        directoryPath = new JTextField(107);
+        Dimension d = new Dimension(100,25);
+        directoryPath.setPreferredSize(d);
         rootField = new JTextField(10);
 
         //create all buttons
@@ -45,6 +47,8 @@ public class Ribbon extends JPanel {
         search = new JButton("Search");
         browse = new JButton("Browse Images");
         directorySearch = new JButton("Directory Search");
+        Dimension d2 = new Dimension(300,25);
+        directorySearch.setPreferredSize(d2);
         filterBy = new JButton("Filter By");
 
         //create sort by menu
@@ -101,8 +105,8 @@ public class Ribbon extends JPanel {
         mb.add(search);
         mb.add(browse);
         mb.add(zipPathLabel);
-        mb.add(sortBy);
         mb.add(filterBy);
+        mb.add(sortBy);
 
         //create JPanel for 
 
@@ -115,16 +119,17 @@ public class Ribbon extends JPanel {
         c.gridy = 0;
         c.gridx = 0;
         c.weightx = 1;
-        c.gridwidth = 5;
+        c.gridwidth = 8;
         add(mb,c);
-        c.fill = GridBagConstraints.HORIZONTAL;
+        c.fill = GridBagConstraints.RELATIVE;
         c.gridy = 1;
         c.gridx = 0;
         c.gridwidth = 4;
         add(directoryPath,c);
-        c.fill = GridBagConstraints.HORIZONTAL;
+        c.fill = GridBagConstraints.RELATIVE;
+        c.anchor = GridBagConstraints.LINE_END;
         c.gridwidth = 1;
-        c.gridx = 5;
+        c.gridx = 4;
         add(directorySearch,c);
         setBackground(Color.gray);
     }

@@ -13,6 +13,7 @@ public class Filter extends JFrame {
 
     
     public Filter() {
+        super("Filter By");
         JPanel jpain = new JPanel();
 
         //create all j lables
@@ -32,20 +33,35 @@ public class Filter extends JFrame {
         //create all buttons
         apply = new JButton("Apply");
 
+        jpain.setLayout(new GridBagLayout());
+        GridBagConstraints c = new GridBagConstraints();
+
         //add everything to the details panel
-        jpain.add(type);
-        jpain.add(pdf);
-        jpain.add(txt);
-        jpain.add(size);
-        jpain.add(minSize);
-        jpain.add(dash);
-        jpain.add(maxSize);
-        jpain.add(apply);
+        c.fill = GridBagConstraints.CENTER;
+        c.gridx = 1;
+        c.gridy = 0;
+        jpain.add(type, c);
+        c.gridy = 1;
+        jpain.add(pdf, c);
+        c.gridy = 2;
+        jpain.add(txt, c);
+        c.gridy = 3;
+        jpain.add(size, c);
+        c.gridy = 4;
+        c.gridx = 0;
+        jpain.add(minSize, c);
+        c.gridx = 1;
+        jpain.add(dash, c);
+        c.gridx = 2;
+        jpain.add(maxSize, c);
+        c.gridx = 1;
+        c.gridy = 5;
+        jpain.add(apply, c);
 
         //Add panel to frame
         add(jpain);
 
         //Set the default size of the frame
-        setSize(300,400);
+        setSize(350,200);
     }
 }

@@ -12,7 +12,7 @@ public class Details extends JPanel{
     
     public Details() {
         //create all j lables
-        selectedFileName = new JLabel("File Test");
+        selectedFileName = new JLabel("No File Selected");
 
         //create all buttons
         openFile = new JButton("Open File");
