@@ -8,6 +8,7 @@ public class Ribbon extends JPanel {
 
     JTextField directoryPath;
     JTextField rootField;
+    JTextField imagePath;
 
     JButton search;
     JToggleButton and;
@@ -15,6 +16,7 @@ public class Ribbon extends JPanel {
     JButton browse;
     JButton directorySearch;
     JButton filterBy;
+    JButton imageSearch;
 
     JMenuItem fileNameA;
     JMenuItem fileNameB;
@@ -40,6 +42,8 @@ public class Ribbon extends JPanel {
         Dimension d = new Dimension(100,25);
         directoryPath.setPreferredSize(d);
         rootField = new JTextField(10);
+        imagePath = new JTextField(107);
+        imagePath.setPreferredSize(d);
 
         //create all buttons
         and = new JToggleButton("AND");
@@ -50,6 +54,8 @@ public class Ribbon extends JPanel {
         Dimension d2 = new Dimension(300,25);
         directorySearch.setPreferredSize(d2);
         filterBy = new JButton("Filter By");
+        imageSearch = new JButton("Image Search");
+        imageSearch.setPreferredSize(d2);
 
         //create sort by menu
         JMenu sortBy = new JMenu("Sort By");
@@ -121,16 +127,26 @@ public class Ribbon extends JPanel {
         c.weightx = 1;
         c.gridwidth = 8;
         add(mb,c);
-        c.fill = GridBagConstraints.RELATIVE;
+
+        c.anchor = GridBagConstraints.LINE_END;
         c.gridy = 1;
         c.gridx = 0;
         c.gridwidth = 4;
+        add(imagePath, c);
+
+        c.gridwidth = 1;
+        c.gridx = 4;
+        add(imageSearch, c);
+
+        c.gridy = 2;
+        c.gridx = 0;
+        c.gridwidth = 4;
         add(directoryPath,c);
-        c.fill = GridBagConstraints.RELATIVE;
-        c.anchor = GridBagConstraints.LINE_END;
+
         c.gridwidth = 1;
         c.gridx = 4;
         add(directorySearch,c);
+
         setBackground(Color.gray);
     }
 }

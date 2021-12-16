@@ -12,7 +12,7 @@ public class lqGUI extends JPanel {
     Ribbon ribbon = new Ribbon();
     Details details = new Details();
     Filter filter = new Filter();
-    String currentRoot = "D:/Documents";
+    String currentRoot = "";
     FileManager fman = new FileManager(new File(currentRoot));
     Query query = new Query(fman);
     ArrayList<Document> hardlist;
@@ -46,10 +46,8 @@ public class lqGUI extends JPanel {
                     ribbon.caseSens.setText("NOT CASE SENSITIVE");
                 else
                     ribbon.caseSens.setText("CASE SENSITIVE");
-
-                }
             }
-        );
+        });
 
         ribbon.search.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -65,7 +63,7 @@ public class lqGUI extends JPanel {
                 else
                     caseSensitive = false;
                     fman.search(ribbon.rootField.getText(), andOperation, caseSensitive);
-                searchShowFiles(query.search(ribbon.rootField.getText(), andOperation, caseSensitive));
+                    searchShowFiles(query.search(ribbon.rootField.getText(), andOperation, caseSensitive));
             }
         });
 
@@ -87,6 +85,13 @@ public class lqGUI extends JPanel {
                 filter.setVisible(true);
             } 
         });
+
+        ribbon.imageSearch.addActionListener(new ActionListener() { 
+            public void actionPerformed(ActionEvent e) {
+                fman.setUserImagePath(new File(ribbon.imagePath.getText()));
+            } 
+        });
+
 
         details.openFile.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -226,7 +231,7 @@ public class lqGUI extends JPanel {
             table.data[fileCounter][2] = new String(filelist.get(i).getFileExtension());
             table.data[fileCounter][3] = new String(filelist.get(i).length() + " bytes");
             table.data[fileCounter][4] = new String("");
-            table.data[fileCounter][5] = new String("Not Supported");
+            table.data[fileCounter][5] = new String("");
             fileCounter++;
         }
 
@@ -256,7 +261,14 @@ public class lqGUI extends JPanel {
             else {
                 table.data[fileCounter][4] = new String("");
             }
-            table.data[fileCounter][5] = new String("Not Supported");
+            if (query.getImagePathsCollection() != null) {
+                System.out.println("did get here");
+                table.data[fileCounter][5] = new String(query.getImageMatchesByDocument(arraylist.get(i)) + " matches");
+            }  
+            else {
+                System.out.println("got here");
+                table.data[fileCounter][5] = new String("0");
+            }
             fileCounter++;
         }
 
