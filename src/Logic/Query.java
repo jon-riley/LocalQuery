@@ -28,10 +28,6 @@ public class Query {
 		Set<Document> matchingDocuments = new HashSet<>();
 		this.manager.getFiles().forEach(document -> {
 			if (userImage != null) { 
-//				TODO:
-//				extract document images and set to array/arraylist
-//				opencv to compare bufferedimage objects - iterate through array/arraylist and compare to userImage
-//				return document when matched
 			}
 			int matchCounter = 0;
 			for (String keyword : this.keywordsCollection) {
@@ -77,6 +73,14 @@ public class Query {
 		return new ArrayList<Document>(matchingDocuments);
 	}	
 	
+	private boolean filenameMatchesKeywords(Document document) {
+		for (String keyword : this.keywordsCollection) {
+			if (document.getName().contains(keyword))
+				return true;
+		}
+		return false;
+	}
+	
 	public int getTextMatchesByDocument(Document document) {
 		try {
 			String content = document.getContentText();
@@ -84,9 +88,26 @@ public class Query {
 			for (String keyword : this.keywordsCollection) {
 				matches += StringUtils.countMatches(content, keyword);
 			}
+			if (filenameMatchesKeywords(document)) 
+				matches++;
 			return matches;
 		} catch (IOException e) {
-			System.out.println("Error: File not found or supported.");
+			System.err.println("Error: File not found or supported.");
+			e.printStackTrace();
+		}
+		return 0;
+	}
+	
+	public int getImageMatchesByDocument(Document document) {
+		try {
+			int matches = 0;
+			for (BufferedImage image : document.getContentImages()) {
+				if (document.compareImages(image))
+					matches++;
+			}
+			return matches;
+		} catch (IOException e) {
+			System.err.println("Error: File not found or supported.");
 			e.printStackTrace();
 		}
 		return 0;
