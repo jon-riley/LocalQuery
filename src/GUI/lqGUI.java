@@ -30,7 +30,7 @@ public class lqGUI extends JPanel {
     //method to add all of the functionality to all of the buttons
     void createButtonListeners() {
         
-        // where to change for the buttons
+        //ribbon buttons
         ribbon.and.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 if(ribbon.and.isSelected())
@@ -92,7 +92,7 @@ public class lqGUI extends JPanel {
             } 
         });
 
-
+        //details buttons
         details.openFile.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 Document d = hardlist.get(chosenRow);
@@ -131,14 +131,58 @@ public class lqGUI extends JPanel {
             } 
         });
 
-
+        //filter buttons
         filter.apply.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 ArrayList<String> tempRay = new ArrayList<String>();
-                tempRay.add("txt");
-                tempRay.add("pdf");
 
                 //Checks for values in min and max size
+                if(!filter.minSize.getText().isEmpty() && !filter.maxSize.getText().isEmpty()) {
+                    if(filter.txt.isSelected()) {
+                        tempRay.add("txt");
+                    }
+                    if(filter.pdf.isSelected()) {
+                        tempRay.add("pdf");
+                    }
+                    if(filter.pptx.isSelected()) {
+                        tempRay.add("pptx");
+                    }
+                    if(filter.xlsx.isSelected()) {
+                        tempRay.add("xlsx");
+                    }
+                    if(filter.docx.isSelected()) {
+                        tempRay.add("docx");
+                    }
+                    searchShowFiles(fman.filterBySize(Long.parseLong(filter.minSize.getText()), Long.parseLong(filter.maxSize.getText()), fman.filterByFileType(tempRay)));
+                } else {
+                    if(filter.txt.isSelected()) {
+                        tempRay.add("txt");
+                    }
+                    if(filter.pdf.isSelected()) {
+                        tempRay.add("pdf");
+                    }
+                    if(filter.pptx.isSelected()) {
+                        tempRay.add("pptx");
+                    }
+                    if(filter.xlsx.isSelected()) {
+                        tempRay.add("xlsx");
+                    }
+                    if(filter.docx.isSelected()) {
+                        tempRay.add("docx");
+                    }
+                    searchShowFiles(fman.filterByFileType(tempRay));
+                }
+
+
+
+
+
+
+
+
+
+                //Checks for values in min and max size
+                /*
                 if(!filter.minSize.getText().isEmpty() && !filter.maxSize.getText().isEmpty()) {
                     if (filter.minSize.getText().matches("[0-9]+") && filter.maxSize.getText().matches("[0-9]+")){
 
@@ -164,6 +208,7 @@ public class lqGUI extends JPanel {
                         searchShowFiles(fman.filterByFileType(tempRay));
                     }
                 }
+                */
             } 
         });
     }
