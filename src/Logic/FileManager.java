@@ -42,7 +42,9 @@ public class FileManager {
 	}
 
 	public ArrayList<Document> getFiles() {
-		return new ArrayList<Document>(this.listFilesOfFolder(root));
+		this.documentMatches = new ArrayList<Document>(this.listFilesOfFolder(root));
+		return this.documentMatches;
+//		return new ArrayList<Document>(this.listFilesOfFolder(root));
 	}
 
 	private HashSet<Document> listFilesOfFolder(File folder) {
@@ -208,5 +210,9 @@ public class FileManager {
 
 	public BufferedImage getUserImage() {
 		return this.userImage;
+	}
+
+	public void setDocumentMatches(ArrayList<Document> list) {
+		this.documentMatches = list;
 	}
 }

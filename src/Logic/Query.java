@@ -45,6 +45,9 @@ public class Query {
 					if (StringUtils.containsIgnoreCase(document.getName(), keyword)) {
 						matchingDocuments.add(document);
 					}
+//					if (document.getName().contains(keyword)) {
+//						matchingDocuments.add(document);
+//					}
 					// search otherwise for content
 					else {
 						String content = document.getContentText();

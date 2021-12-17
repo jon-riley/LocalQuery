@@ -22,7 +22,7 @@ public class Filter extends JFrame {
         //create all j lables
         JLabel type = new JLabel("Type");
         JLabel size = new JLabel("Size in bytes");
-        JLabel dash = new JLabel(" ——————— ");
+        JLabel dash = new JLabel(" ---------- ");
 
         //type includes dot
         //create check boxes

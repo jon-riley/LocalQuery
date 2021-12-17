@@ -193,8 +193,8 @@ public class lqGUI extends JPanel {
         ribbon.matchedKeyTermsB.addActionListener(e -> searchShowFiles(fman.sortByMatches(false)));
 
         //for when we have image capability
-        //ribbon.matchedKeyImagesA.addActionListener(e -> searchShowFiles(fman.sortByFileName(true)));
-        //.matchedKeyImagesB.addActionListener(e -> searchShowFiles(fman.sortByFileName(false)));
+        ribbon.matchedKeyImagesA.addActionListener(e -> searchShowFiles(fman.sortByFileName(true)));
+        ribbon.matchedKeyImagesB.addActionListener(e -> searchShowFiles(fman.sortByFileName(false)));
     }
 
     void clickTable() {
@@ -255,6 +255,7 @@ public class lqGUI extends JPanel {
         //updateTable();
 
         hardlist = arraylist;
+        fman.setDocumentMatches(hardlist);
         int fileCounter = 0;
         table.data = new String[arraylist.size()][6];
         for (int i = 0; i < arraylist.size(); i++) {

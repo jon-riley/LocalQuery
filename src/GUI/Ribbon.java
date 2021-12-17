@@ -13,7 +13,6 @@ public class Ribbon extends JPanel {
     JButton search;
     JToggleButton and;
     JToggleButton caseSens;
-    JButton browse;
     JButton directorySearch;
     JButton filterBy;
     JButton imageSearch;
@@ -49,7 +48,6 @@ public class Ribbon extends JPanel {
         and = new JToggleButton("AND");
         caseSens = new JToggleButton("CASE SENSITIVE");
         search = new JButton("Search");
-        browse = new JButton("Browse Images");
         directorySearch = new JButton("Directory Search");
         Dimension d2 = new Dimension(300,25);
         directorySearch.setPreferredSize(d2);
@@ -109,7 +107,6 @@ public class Ribbon extends JPanel {
         mb.add(and);
         mb.add(caseSens);
         mb.add(search);
-        mb.add(browse);
         mb.add(zipPathLabel);
         mb.add(filterBy);
         mb.add(sortBy);
